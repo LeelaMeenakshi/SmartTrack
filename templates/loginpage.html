@@ -1,0 +1,63 @@
+<!-- login page -->
+<html>
+  <head>
+    <title>login</title>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="hello.png" type="image/x-text" />
+    <link rel="stylesheet" href="loginpage.css" />
+  </head>
+
+  <body>
+    <nav>
+      <div>
+        <h1>Smart <span>Track</span></h1>
+      </div>
+      <div class="homelink">
+        <a
+          href="http://127.0.0.1:5500/Smarttrack%20originals/landingpage%20copy.html"
+          >Home</a
+        >
+      </div>
+    </nav>
+
+    <hr />
+    <div class="hero">
+      <div class="textin">
+        <h2>Welcome Back</h2>
+        <h3>Sign in to continue.</h3>
+      </div>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="input">
+          <label>Email :</label>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email address"
+          />
+          <label>Password :</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter the password"
+          />
+          <div class="ls">
+            <button class="login" type="submit">Login</button>
+            <p>Don't have an account?</p>
+            <button class="signup">Sign up</button>
+          </div>
+          <br />
+        </div>
+        <!--input-->
+      </form>
+    </div>
+    <footer>
+      <div class="footer-content">
+        <p>
+          2026 SmartTrack. All rights reserved. For any queries or suggestions :
+          klm@gmail.com
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

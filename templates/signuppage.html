@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <title>signup</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href=" signuppage.css" />
+    <link rel="icon" href="hello.png" type="text/x-text" />
+  </head>
+
+  <body>
+    <nav>
+      <h1>Smart <span>Track</span></h1>
+      <div class="homelink">
+        <a
+          href="http://127.0.0.1:5500/Smarttrack%20originals/landingpage%20copy.html"
+          >Home</a
+        >
+      </div>
+    </nav>
+
+    <div>
+      <p>Create Account</p>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="inputs">
+          <label>Full name</label>
+          <input type="text" name="name" placeholder="Enter your full name" />
+          <label>College Email</label>
+          <input type="email" name="email" placeholder="Enter your email" />
+          <label>Password</label>
+          <input type="password" name="password" />
+          <button class="ca" type="submit">Create Account</button>
+          <p>Already have an account?</p>
+          <button class="ca">Login</button>
+        </div>
+      </form>
+    </div>
+
+    <footer>
+      <div class="footer-content">
+        <p>
+          2026 SmartTrack. All rights reserved. For any queries or suggestions :
+          klm@gmail.com
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

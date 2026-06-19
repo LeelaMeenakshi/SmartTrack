@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <title>smarttrack</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="dashboard.css" />
+    <link rel="icon" href="hello.png" type="text" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <div class="logo">
+          <h1>Smart <span>Track</span></h1>
+        </div>
+        <!--logo-->
+
+        <div class="profile">
+          <h2>Name</h2>
+          <h3>Discipline</h3>
+        </div>
+        <!--profile-->
+
+        <div class="navlinks">
+          <a href="http://127.0.0.1:5500/Smarttrack%20originals/dashboard.html"
+            >Dashboard</a
+          >
+          <a
+            href="http://127.0.0.1:5500/Smarttrack%20originals/mycourses.html"
+            class="active"
+            >My courses</a
+          >
+          <a
+            href="http://127.0.0.1:5500/Smarttrack%20originals/basketanalysis.html"
+            >Basket Analysis</a
+          >
+          <a href="http://127.0.0.1:5500/Smarttrack%20originals/semplanner.html"
+            >Semester Planner</a
+          >
+          <a href="#">Reports</a>
+        </div>
+        <!--navlinks-->
+
+        <div class="logout">
+          <a href="/logout/" class="logoutbtn">Logout</a>
+        </div>
+        <!--logout-->
+      </div>
+      <!--sidebar-->
+      <div class="main">
+        <div class="topbar">
+          <div class="welcome">
+            <h1>Welcome back, {{ user.first_name }}!</h1>
+            <h2>Here is your academic overview</h2>
+          </div>
+          <button>+Add semester</button>
+        </div>
+
+        <div class="progcard">
+          <div class="card">
+            <h2>CGPA</h2>
+            <h1>8.45</h1>
+            <h2>Good standing</h2>
+          </div>
+
+          <div class="card">
+            <h2>Credits done</h2>
+            <h1>96</h1>
+            <h2>On track</h2>
+          </div>
+          <div class="card">
+            <h2>Credits left</h2>
+            <h1>64</h1>
+            <h2>To graduate</h2>
+          </div>
+          <div class="card">
+            <h2>Graduation</h2>
+            <h1>60 %</h1>
+            <div class="progress-bar">
+              <div
+                class="progress-fill"
+                style="width: 60%; background: #2563eb"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bandc">
+          <div class="baskets">
+            <h3>Basket Progress</h3>
+            <p>Mandatory</p>
+            <div class="progress-bar">
+              <div
+                class="progress-fill"
+                style="width: 80%; background: #2563eb"
+              ></div>
+              <p>32/40</p>
+
+              <p>Science Basket</p>
+              <!-- <div class="progress-bar">
+              <div
+                class="progress-fill"
+                style="width: 60%; background: #25eba2"
+              ></div> -->
+              <p>20/30</p>
+            </div>
+          </div>
+
+          <div class="trend">
+            <h3>Semester GPA Trend</h3>
+            <canvas id="gpaChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    const ctx = document.getElementById("gpaChart").getContext("2d");
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Sem 1", "Sem 2", "Sem 3", "Sem 4"],
+        datasets: [
+          {
+            label: "GPA",
+            data: [8.2, 8.65, 8.4, 8.5],
+            backgroundColor: "#2563eb",
+            borderRadius: 4,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: { min: 7, max: 10 },
+        },
+        plugins: { legend: { display: false } },
+      },
+    });
+  </script>
+</html>
