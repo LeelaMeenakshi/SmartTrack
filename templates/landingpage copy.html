@@ -16,10 +16,13 @@
         <a href="#">Features</a>
       </div>
       <div class="authbuttons">
-        <button class="lb" onclick="window.location.href = 'loginpage.html'">
+        <button class="lb" onclick="window.location.href = '/login/'">
           Login
         </button>
-        <button class="sb">Sign Up</button>
+        <button class="sb" onclick="window.location.href = '/signup/'">
+          Sign Up
+        </button>
+        {% comment %} <button class="sb">Sign Up</button> {% endcomment %}
       </div>
     </nav>
     <hr />
@@ -30,7 +33,10 @@
         semester plans all in one place.
       </p>
       <div class="authbuttons">
-        <button class="gs">Get Started</button>
+        <button class="gs" onclick="window.location.href = '/signup/'">
+          Get Started
+        </button>
+        {% comment %} <button class="gs">Get Started</button> {% endcomment %}
         <button class="lm">Learn More</button>
       </div>
     </div>
