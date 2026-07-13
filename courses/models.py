@@ -25,5 +25,13 @@ class Course(models.Model):
     def __str__(self):
         return self.course_name
     
+class CourseCatalog(models.Model):
+    course_code = models.CharField(max_length=20)
+    course_name = models.CharField(max_length=100)
+    credits = models.IntegerField()
+    basket = models.CharField(max_length=50)
+    def __str__(self):
+        return f"{self.course_code} - {self.course_name}"
+    
 
 # Create your models here.

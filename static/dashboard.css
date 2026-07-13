@@ -182,3 +182,57 @@ transform:scale(1.1);
     background-color: #2563eb;
     color: white !important;   
 }
+#course-results{
+    background: white;
+    height: 50px;
+    overflow-y: auto;
+    display:none;
+}
+.semester-add{
+    width: 320px;
+}
+.course-item{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 10px;
+}
+.add-course-btn{
+    width: 15px !important;
+    height: 15px !important;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 9px;
+    font-weight: bold;
+    flex-shrink: 0;
+    text-align: center;
+}
+.remove-course-btn{
+    width: 15px !important;
+    height: 15px !important;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 9px;
+    font-weight: bold;
+    flex-shrink: 0;
+    text-align: center;
+}
+.sel-course{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 10px;
+
+}
+#selected-courses{
+    max-height: 200px;
+    overflow-y: auto;
+}

@@ -1,9 +1,10 @@
+{% load static %}
 <!doctype html>
 <html>
   <head>
     <title>smarttrack</title>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="dashboard.css" />
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}" />
     <link rel="icon" href="hello.png" type="text" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
@@ -17,28 +18,17 @@
         <!--logo-->
 
         <div class="profile">
-          <h2>Name</h2>
+          <h2>{{ user.first_name }}</h2>
           <h3>Discipline</h3>
         </div>
         <!--profile-->
 
         <div class="navlinks">
-          <a href="http://127.0.0.1:5500/Smarttrack%20originals/dashboard.html"
-            >Dashboard</a
-          >
-          <a
-            href="http://127.0.0.1:5500/Smarttrack%20originals/mycourses.html"
-            class="active"
-            >My courses</a
-          >
-          <a
-            href="http://127.0.0.1:5500/Smarttrack%20originals/basketanalysis.html"
-            >Basket Analysis</a
-          >
-          <a href="http://127.0.0.1:5500/Smarttrack%20originals/semplanner.html"
-            >Semester Planner</a
-          >
-          <a href="#">Reports</a>
+          <a href="#" class="active">Dashboard</a>
+          <a href="/mycourses/">My courses</a>
+          <a href="/basketanalysis/">Basket Analysis</a>
+          <a href="/semplanner/">Semester Planner</a>
+          <a href="/coursehistory/">Reports</a>
         </div>
         <!--navlinks-->
 
@@ -54,7 +44,40 @@
             <h1>Welcome back, {{ user.first_name }}!</h1>
             <h2>Here is your academic overview</h2>
           </div>
-          <button>+Add semester</button>
+          <div class="semester-add">
+            <button onclick="showSemester()">+ Add Semester</button>
+            <div id="semester-box" style="display: none; margin-top: 10px">
+              <select onchange="showChosenSemester(this)">
+                <option value="">Select Semester</option>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+                <option value="8">Semester 8</option>
+              </select>
+              <h3 id="semester-status"></h3>
+              <input
+                type="text"
+                id="course-search"
+                placeholder="Search course"
+                style="display: none"
+                oninput="searchCourse()"
+              />
+              <div id="course-results">
+                {% comment %}
+                <p>HELLO</p>
+                <p>{{ catalog_courses|length }}</p>
+                {% for course in catalog_courses%}
+                <p>{{ course.course_code }} {{ course.course_name }}</p>
+                {%endfor%} {% endcomment %}
+              </div>
+              <h3>Selected Courses</h3>
+              <div id="selected-courses"></div>
+            </div>
+          </div>
         </div>
 
         <div class="progcard">
@@ -114,6 +137,173 @@
         </div>
       </div>
     </div>
+    <script>
+      function showSemester() {
+        document.getElementById("semester-box").style.display = "block";
+      }
+    </script>
+    {% comment %}
+    <script>
+      let selectedSemester = "";
+      function showChosenSemester(x) {
+        selectedSemester = Number(x.value);
+        document.getElementById("semester-status").innerText =
+          "You are adding courses for Semester" + selectedSemester;
+        document.getElementById("course-search").style.display = "block";
+        let selectedBox = document.getElementById("selected-courses");
+        selectedBox.innerHTML = "";
+        selectedCourses[selectedSemester].forEach((course) => {
+          displayCourse(course);
+        });
+
+        //document.getElementById("selected-courses").style.display = "block";
+        console.log("Stored:", selectedSemester);
+      }
+    </script>
+    {% endcomment %}
+
+    <script>
+      let selectedCourses = {};
+      for (let i = 1;i<=8; i ++){
+        selectedCourses[i]= [];
+        console.log(selectedCourses);
+      }
+      function displayCourse(course){
+        let selectedBox = document.getElementById("selected-courses");
+        let selectedItem = document.createElement("div");
+        selectedItem.className= "sel-course";
+        let p = document.createElement("p");
+        let removeBtn = document.createElement("button");
+        removeBtn.onclick= function(){
+          selectedItem.remove();
+          selectedCourses[selectedSemester]= selectedCourses[selectedSemester].filter(existingCourse=>{
+            return existingCourse.course_code !== course.course_code;
+          });
+        }
+        p.innerText= course.course_code + " " + course.course_name
+        removeBtn.className = "remove-course-btn";
+        removeBtn.innerText= 'x';
+
+        selectedItem.append(p);
+        selectedItem.append(removeBtn);
+                  //console.log(selectedBox);
+                  //console.log("Selected Courses:", selectedCourses);
+                  //console.log("Semester:", selectedSemester);
+                  //console.log("Selected Box:", selectedBox);
+        selectedBox.append(selectedItem);
+      }
+
+      let selectedSemester = "";
+      function showChosenSemester(x) {
+        selectedSemester = Number(x.value);
+        document.getElementById("semester-status").innerText =
+          "You are adding courses for Semester" + selectedSemester;
+        document.getElementById("course-search").style.display = "block";
+        let selectedBox = document.getElementById("selected-courses");
+        selectedBox.innerHTML = "";
+        selectedCourses[selectedSemester].forEach((course) => {
+          displayCourse(course);
+        });
+
+        //document.getElementById("selected-courses").style.display = "block";
+        console.log("Stored:", selectedSemester);
+      }
+      function searchCourse() {
+        console.log(document.getElementById("course-search").value);
+        let text = document.getElementById("course-search").value;
+        let t = document.getElementById("course-results");
+
+        if (text.length >= 2) {
+          {% comment %} console.log("SHOWING"); {% endcomment %}
+          t.style.display = "block";
+          fetch(`/search-course/?q=${text}`)
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              let resultsBox = document.getElementById("course-results");
+              resultsBox.innerHTML= "";
+              data.courses.forEach(course => {
+
+                let item = document.createElement("div");
+                item.className = "course-item";
+
+                let p = document.createElement("p");
+                let btn = document.createElement("button");
+                btn.className = "add-course-btn";
+                btn.innerText= '+';
+                btn.onclick= function(){
+                  console.log(course);
+                  //let selectedBox = document.getElementById("selected-courses");
+                  let duplicate = false;
+
+                  // for already existing courses, check if the present course id
+                  //present in it already or not, to avoid multiple selection of same course
+                  selectedCourses[selectedSemester].forEach(existingCourse=>{
+                    if(existingCourse.course_code === course.course_code){
+                      duplicate= true;
+                    }
+                  });
+                  if (duplicate){
+                    alert("Course already selected!");
+                    return;
+                  }
+
+                  selectedCourses[selectedSemester].push(course);
+                  displayCourse(course);
+                  {% comment %} let selectedItem = document.createElement("div"); {% endcomment %}
+                  {% comment %} selectedItem.className="sel-course";
+                  let p = document.createElement("p");
+                  let removeBtn = document.createElement("button");
+                  removeBtn.onclick = function(){
+                    selectedItem.remove();
+                    selectedCourses[selectedSemester] = selectedCourses[selectedSemester].filter(existingCourse=>{
+                      return existingCourse.course_code !== course.course_code;
+                    });
+                  }
+                  p.innerText= course.course_code + " " + course.course_name
+                  removeBtn.className = "remove-course-btn";
+                  removeBtn.innerText= 'x';
+
+                  selectedItem.append(p);
+                  selectedItem.append(removeBtn);
+
+                  console.log(selectedBox);
+
+                  console.log("Selected Courses:", selectedCourses);
+                  console.log("Semester:", selectedSemester);
+                  console.log("Selected Box:", selectedBox);
+                  selectedBox.append(selectedItem); {% endcomment %}
+
+                };
+                p.innerText= course.course_code+" "+course.course_name;
+                item.append(p);
+                item.append(btn);
+                resultsBox.append(item);
+              });
+            });
+        } else {
+          console.log("HIDING");
+          t.style.display = "none";
+        }
+      }
+    </script>
+    <script>
+      let selectedSemester = "";
+      function showChosenSemester(x) {
+        selectedSemester = Number(x.value);
+        document.getElementById("semester-status").innerText =
+          "You are adding courses for Semester" + selectedSemester;
+        document.getElementById("course-search").style.display = "block";
+        let selectedBox = document.getElementById("selected-courses");
+        selectedBox.innerHTML = "";
+        selectedCourses[selectedSemester].courses.forEach((course) => {
+          displayCourse(course);
+        });
+
+        //document.getElementById("selected-courses").style.display = "block";
+        console.log("Stored:", selectedSemester);
+      }
+    </script>
   </body>
   <script>
     const ctx = document.getElementById("gpaChart").getContext("2d");

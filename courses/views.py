@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from .models import Student, Course, CourseCatalog
+from django.http import JsonResponse
+from django.db.models import Q
 
 
 def signup_view(request):
@@ -69,14 +72,24 @@ def login_view(request):
         'loginpage.html'
     )
 
-
+from .models import Student
+from .models import Course
 def dashboard_view(request):
+    student = Student.objects.first()
+    courses = Course.objects.filter(
+        student = student
+    )
+    catalog_courses = CourseCatalog.objects.all()[:10]
+    print(catalog_courses)
 
     return render(
         request,
         'dashboard.html',
         {
-            'user':request.user
+            'user':request.user,
+            'student': student,
+            'courses': courses,
+            'catalog_courses': catalog_courses
         }
     )
 
@@ -94,4 +107,36 @@ def index_view(request):
         request,
         'landingpage copy.html'
     )
+
+def courses_view(request):
+    return render(
+        request,
+        'mycourses.html'
+    )
+
+def basket_view(request):
+    return render(request,'basketanalysis.html')
+
+def planner_view(request):
+    return render(request,'semplanner.html')
+
+def reports_view(request):
+    return render(request,'history.html')
+
+
+def search_course(request):
+    query = request.GET.get("q")
+    courses = CourseCatalog.objects.filter(
+        Q(course_code__icontains= query) |
+        Q(course_name__icontains= query)
+    )
+    results= []
+    for course in courses:
+        dic = {"course_code":course.course_code,
+               "course_name":course.course_name
+               }
+        results.append(dic)
+    return JsonResponse({
+        "courses":results
+    })
 # Create your views here.

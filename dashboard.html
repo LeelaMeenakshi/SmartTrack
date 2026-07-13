@@ -1,9 +1,10 @@
+{% load static %}
 <!doctype html>
 <html>
   <head>
     <title>smarttrack</title>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="dashboard.css" />
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}" />
     <link rel="icon" href="hello.png" type="text" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
@@ -11,20 +12,32 @@
   <body>
     <div class="container">
       <div class="sidebar">
-        <h1>Smart <span>Track</span></h1>
+        <div class="logo">
+          <h1>Smart <span>Track</span></h1>
+        </div>
+        <!--logo-->
+
         <div class="profile">
           <h2>Name</h2>
           <h3>Discipline</h3>
         </div>
-        <div class="bells">
-          <a href="#">Dashboard</a>
-          <a href="#">My courses</a>
-          <a href="#">Basket Analysis</a>
-          <a href="#">Semester Planner</a>
-          <a href="#">Reports</a>
+        <!--profile-->
+
+        <div class="navlinks">
+          <a href="#" class="active">Dashboard</a>
+          <a href="/courses/">My courses</a>
+          <a href="/basket/">Basket Analysis</a>
+          <a href="/planner/">Semester Planner</a>
+          <a href="/reports/">Reports</a>
         </div>
-        <button class="lo">Logout</button>
+        <!--navlinks-->
+
+        <div class="logout">
+          <button>Logout</button>
+        </div>
+        <!--logout-->
       </div>
+      <!--sidebar-->
       <div class="main">
         <div class="topbar">
           <div class="welcome">
