@@ -76,6 +76,9 @@
               </div>
               <h3>Selected Courses</h3>
               <div id="selected-courses"></div>
+              <div id="save-semester">
+                <button onclick="saveSemester()">Save Semester</button>
+              </div>
             </div>
           </div>
         </div>
@@ -288,7 +291,6 @@
       }
     </script>
     <script>
-      let selectedSemester = "";
       function showChosenSemester(x) {
         selectedSemester = Number(x.value);
         document.getElementById("semester-status").innerText =
@@ -302,6 +304,45 @@
 
         //document.getElementById("selected-courses").style.display = "block";
         console.log("Stored:", selectedSemester);
+      }
+    </script>
+    <script>
+      function getCookie(name) {
+        let cookieValue = null;
+
+        if (document.cookie && document.cookie !== "") {
+          let cookies = document.cookie.split(";");
+
+          for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+
+            if (cookie.startsWith(name + "=")) {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1),
+              );
+              break;
+            }
+          }
+        }
+
+        return cookieValue;
+      }
+      function saveSemester() {
+        console.log("save button is clicked");
+        let data = {
+          semester: selectedSemester,
+          courses: selectedCourses[selectedSemester],
+        };
+        let csrftoken = getCookie("csrftoken");
+        fetch("/save-semester/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken,
+          },
+          body: JSON.stringify(data),
+        });
+        console.log(data);
       }
     </script>
   </body>

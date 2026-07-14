@@ -5,7 +5,7 @@ from django.contrib import messages
 from .models import Student, Course, CourseCatalog
 from django.http import JsonResponse
 from django.db.models import Q
-
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 def signup_view(request):
 
@@ -74,6 +74,7 @@ def login_view(request):
 
 from .models import Student
 from .models import Course
+@ensure_csrf_cookie
 def dashboard_view(request):
     student = Student.objects.first()
     courses = Course.objects.filter(
@@ -139,4 +140,7 @@ def search_course(request):
     return JsonResponse({
         "courses":results
     })
+
+def save_semester(request):
+    print(dir(request))
 # Create your views here.

@@ -236,3 +236,19 @@ transform:scale(1.1);
     max-height: 200px;
     overflow-y: auto;
 }
+#save-semester{
+    margin-top:20px;
+    display:flex;
+    justify-content:flex-end;
+}
+#save-semester button{
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+    font-family:inherit;
+}
+#save-semester button:hover{
+    opacity: 1;
+}

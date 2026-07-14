@@ -18,5 +18,6 @@ path('basket/', views.basket_view, name = 'basket'),
 path('planner/', views.planner_view, name = 'planner'),
 path('reports/', views.reports_view, name = 'reports'),
 path('search-course/', views.search_course, name = 'search_course'),
+path('save-semester/', views.save_semester, name = 'save-semester'),
 
 ]
