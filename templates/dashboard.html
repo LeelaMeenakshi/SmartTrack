@@ -176,7 +176,39 @@
         let selectedItem = document.createElement("div");
         selectedItem.className= "sel-course";
         let p = document.createElement("p");
+        let gradeInput = document.createElement("input");
+        gradeInput.type = "number";
+        gradeInput.placeholder = "Enter your Grade";
+        gradeInput.min = 0;
+        gradeInput.max = 10;
+        gradeInput.oninput = function(){
+          course.grade = gradeInput.value;
+        };
+
+
+        let basketSelect = document.createElement("select");
+        course.basket = basketSelect.value;
+        let option1 = document.createElement("option");
+        option1.value="Maths";
+        option1.innerText = "Maths";
+        basketSelect.append(option1);
+        let option2 = document.createElement("option");
+        option2.value="Science";
+        option2.innerText = "Science";
+        basketSelect.append(option2);
+        let option3 = document.createElement("option");
+        option3.value="HSS";
+        option3.innerText = "HSS";
+        basketSelect.append(option3);
+        let option4 = document.createElement("option");
+        option4.value="Mandatory";
+        option4.innerText = "Mandatory";
+        basketSelect.append(option4);
         let removeBtn = document.createElement("button");
+        basketSelect.onchange = function(){
+          course.basket = basketSelect.value
+        }
+
         removeBtn.onclick= function(){
           selectedItem.remove();
           selectedCourses[selectedSemester]= selectedCourses[selectedSemester].filter(existingCourse=>{
@@ -188,6 +220,9 @@
         removeBtn.innerText= 'x';
 
         selectedItem.append(p);
+        selectedItem.append(gradeInput);
+        selectedItem.append(basketSelect);
+
         selectedItem.append(removeBtn);
                   //console.log(selectedBox);
                   //console.log("Selected Courses:", selectedCourses);

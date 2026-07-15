@@ -6,7 +6,8 @@ from .models import Student, Course, CourseCatalog
 from django.http import JsonResponse
 from django.db.models import Q
 from django.views.decorators.csrf import ensure_csrf_cookie
-
+import json
+from .models import Student, CourseCatalog, CompletedCourse
 def signup_view(request):
 
     if request.method == 'POST':
@@ -142,5 +143,23 @@ def search_course(request):
     })
 
 def save_semester(request):
-    print(dir(request))
+    data = json.loads(request.body)
+    print(data)
+    student = Student.objects.first()
+    for course in data["courses"]:
+        catalog_course = CourseCatalog.objects.get(
+            course_code = course["course_code"]
+        )
+
+        CompletedCourse.objects.create(
+            student = student,
+            semester = data["semester"],
+            grade = course["grade"],
+            basket=course["basket"],
+            course = catalog_course
+        )
+
+    return JsonResponse({
+        "message":"Saved successfully"
+    })
 # Create your views here.

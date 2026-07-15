@@ -33,5 +33,14 @@ class CourseCatalog(models.Model):
     def __str__(self):
         return f"{self.course_code} - {self.course_name}"
     
+class CompletedCourse(models.Model):
+    student = models.ForeignKey(Student,on_delete = models.CASCADE)
+    semester = models.IntegerField()
+    grade = models.FloatField()
+    course= models.ForeignKey(CourseCatalog, on_delete = models.CASCADE)
+    basket = models.CharField(max_length=50)
+
+
+    
 
 # Create your models here.
