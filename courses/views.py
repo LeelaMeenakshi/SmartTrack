@@ -162,4 +162,29 @@ def save_semester(request):
     return JsonResponse({
         "message":"Saved successfully"
     })
+
+def get_semesters(request):
+    student = Student.objects.first()
+    completed_courses = CompletedCourse.objects.filter(
+        student = student
+    )
+    semesters= {}
+    for course in completed_courses:
+        semester = course.semester
+        if semester not in semesters:
+            semesters[semester]= []
+        course_data = {
+            "course_code": course.course.course_code,
+            "course_name": course.course.course_name,
+            "grade": course.grade,
+            "basket": course.basket,
+            
+        }
+        semesters[semester].append(course_data)
+        return JsonResponse({
+            "semesters": semesters
+        })
+
+
+
 # Create your views here.

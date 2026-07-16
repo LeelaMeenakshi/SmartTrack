@@ -188,6 +188,8 @@
 
         let basketSelect = document.createElement("select");
         course.basket = basketSelect.value;
+        let option0 = document.createElement("option");
+        option0.value = "Select"
         let option1 = document.createElement("option");
         option1.value="Maths";
         option1.innerText = "Maths";
@@ -333,6 +335,12 @@
         document.getElementById("course-search").style.display = "block";
         let selectedBox = document.getElementById("selected-courses");
         selectedBox.innerHTML = "";
+        console.log("Selected Semester:", selectedSemester);
+        console.log("Selected Courses:", selectedCourses);
+        console.log(
+          "Current Semester Data:",
+          selectedCourses[selectedSemester],
+        );
         selectedCourses[selectedSemester].courses.forEach((course) => {
           displayCourse(course);
         });
@@ -379,6 +387,18 @@
         });
         console.log(data);
       }
+      function loadSemester() {
+        fetch("/get-semesters/")
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            for (let semester in data.semesters) {
+              selectedCourses[semester] = data.semesters[semester];
+            }
+            console.log(selectedCourses);
+          });
+      }
+      loadSemester();
     </script>
   </body>
   <script>
