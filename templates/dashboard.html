@@ -189,7 +189,8 @@
         let basketSelect = document.createElement("select");
         course.basket = basketSelect.value;
         let option0 = document.createElement("option");
-        option0.value = "Select"
+        option0.value = "Select";
+        basketSelect.append(option0);
         let option1 = document.createElement("option");
         option1.value="Maths";
         option1.innerText = "Maths";
@@ -212,6 +213,22 @@
         }
 
         removeBtn.onclick= function(){
+          let csrftoken = getCookie("csrftoken");
+          console.log("remove clicked");
+          console.log(course);
+          console.log(selectedSemester);
+          fetch("/remove-course/",{
+            method:"POST",
+            headers:{
+              "Content-Type":"application/json",
+              "X-CSRFToken":csrftoken
+              },
+              body:JSON.stringify({
+                semester:selectedSemester,
+                course_code : course.course_code
+              })
+            });
+
           selectedItem.remove();
           selectedCourses[selectedSemester]= selectedCourses[selectedSemester].filter(existingCourse=>{
             return existingCourse.course_code !== course.course_code;
@@ -290,29 +307,7 @@
 
                   selectedCourses[selectedSemester].push(course);
                   displayCourse(course);
-                  {% comment %} let selectedItem = document.createElement("div"); {% endcomment %}
-                  {% comment %} selectedItem.className="sel-course";
-                  let p = document.createElement("p");
-                  let removeBtn = document.createElement("button");
-                  removeBtn.onclick = function(){
-                    selectedItem.remove();
-                    selectedCourses[selectedSemester] = selectedCourses[selectedSemester].filter(existingCourse=>{
-                      return existingCourse.course_code !== course.course_code;
-                    });
-                  }
-                  p.innerText= course.course_code + " " + course.course_name
-                  removeBtn.className = "remove-course-btn";
-                  removeBtn.innerText= 'x';
 
-                  selectedItem.append(p);
-                  selectedItem.append(removeBtn);
-
-                  console.log(selectedBox);
-
-                  console.log("Selected Courses:", selectedCourses);
-                  console.log("Semester:", selectedSemester);
-                  console.log("Selected Box:", selectedBox);
-                  selectedBox.append(selectedItem); {% endcomment %}
 
                 };
                 p.innerText= course.course_code+" "+course.course_name;
@@ -341,7 +336,7 @@
           "Current Semester Data:",
           selectedCourses[selectedSemester],
         );
-        selectedCourses[selectedSemester].courses.forEach((course) => {
+        selectedCourses[selectedSemester].forEach((course) => {
           displayCourse(course);
         });
 

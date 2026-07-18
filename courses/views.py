@@ -181,10 +181,25 @@ def get_semesters(request):
             
         }
         semesters[semester].append(course_data)
-        return JsonResponse({
-            "semesters": semesters
-        })
+    return JsonResponse({
+        "semesters": semesters
+    })
 
+def remove_course(request):
+    data = json.loads(request.body)
+    print(data)
+    student = Student.objects.first()
+    semester = data["semester"]
+    course_code = data["course_code"]
+    completed_course = CompletedCourse.objects.get(
+        student=student,
+        semester=semester,
+        course__course_code=course_code
+    )
+    completed_course.delete()
+    return JsonResponse({
+        "message": "Course removed successfully"
+    })
 
 
 # Create your views here.

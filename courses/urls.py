@@ -20,5 +20,6 @@ path('reports/', views.reports_view, name = 'reports'),
 path('search-course/', views.search_course, name = 'search_course'),
 path('save-semester/', views.save_semester, name = 'save-semester'),
 path("get-semesters/", views.get_semesters, name="get_semesters"),
+path("remove-course/", views.remove_course, name="remove_course"),
 
 ]
