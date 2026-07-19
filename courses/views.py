@@ -146,6 +146,11 @@ def save_semester(request):
     data = json.loads(request.body)
     print(data)
     student = Student.objects.first()
+    semester = data["semester"]
+    CompletedCourse.objects.filter(
+        student = student,
+        semester = semester
+    ).delete()
     for course in data["courses"]:
         catalog_course = CourseCatalog.objects.get(
             course_code = course["course_code"]

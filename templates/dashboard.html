@@ -145,26 +145,6 @@
         document.getElementById("semester-box").style.display = "block";
       }
     </script>
-    {% comment %}
-    <script>
-      let selectedSemester = "";
-      function showChosenSemester(x) {
-        selectedSemester = Number(x.value);
-        document.getElementById("semester-status").innerText =
-          "You are adding courses for Semester" + selectedSemester;
-        document.getElementById("course-search").style.display = "block";
-        let selectedBox = document.getElementById("selected-courses");
-        selectedBox.innerHTML = "";
-        selectedCourses[selectedSemester].forEach((course) => {
-          displayCourse(course);
-        });
-
-        //document.getElementById("selected-courses").style.display = "block";
-        console.log("Stored:", selectedSemester);
-      }
-    </script>
-    {% endcomment %}
-
     <script>
       let selectedCourses = {};
       for (let i = 1;i<=8; i ++){
@@ -172,6 +152,7 @@
         console.log(selectedCourses);
       }
       function displayCourse(course){
+        console.log("displaying,course.course_code");
         let selectedBox = document.getElementById("selected-courses");
         let selectedItem = document.createElement("div");
         selectedItem.className= "sel-course";
@@ -181,15 +162,17 @@
         gradeInput.placeholder = "Enter your Grade";
         gradeInput.min = 0;
         gradeInput.max = 10;
+        gradeInput.value = course.grade || "";
         gradeInput.oninput = function(){
           course.grade = gradeInput.value;
         };
 
 
         let basketSelect = document.createElement("select");
-        course.basket = basketSelect.value;
+        //course.basket = basketSelect.value;
         let option0 = document.createElement("option");
-        option0.value = "Select";
+        option0.value = "";
+        option0.innerText = "Select";
         basketSelect.append(option0);
         let option1 = document.createElement("option");
         option1.value="Maths";
@@ -208,6 +191,8 @@
         option4.innerText = "Mandatory";
         basketSelect.append(option4);
         let removeBtn = document.createElement("button");
+        basketSelect.value = course.basket || "";
+
         basketSelect.onchange = function(){
           course.basket = basketSelect.value
         }
@@ -248,10 +233,11 @@
                   //console.log("Semester:", selectedSemester);
                   //console.log("Selected Box:", selectedBox);
         selectedBox.append(selectedItem);
+        console.log("done", course.course_code);
       }
 
       let selectedSemester = "";
-      function showChosenSemester(x) {
+      {% comment %} function showChosenSemester(x) {
         selectedSemester = Number(x.value);
         document.getElementById("semester-status").innerText =
           "You are adding courses for Semester" + selectedSemester;
@@ -264,7 +250,7 @@
 
         //document.getElementById("selected-courses").style.display = "block";
         console.log("Stored:", selectedSemester);
-      }
+      } {% endcomment %}
       function searchCourse() {
         console.log(document.getElementById("course-search").value);
         let text = document.getElementById("course-search").value;
@@ -386,11 +372,11 @@
         fetch("/get-semesters/")
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
+            console.log("response from backend", data);
             for (let semester in data.semesters) {
               selectedCourses[semester] = data.semesters[semester];
             }
-            console.log(selectedCourses);
+            console.log("selected courses after loading", selectedCourses);
           });
       }
       loadSemester();
