@@ -1,9 +1,10 @@
+{% load static%}
 <!doctype html>
 <html>
   <head>
     <title>smarttrack</title>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="history.css" />
+    <link rel="stylesheet" href="{% static 'history.css' %}" />
     <link rel="icon" href="hello.png" type="text" />
   </head>
   <body>
@@ -21,22 +22,11 @@
         <!--profile-->
 
         <div class="navlinks">
-          <a href="http://127.0.0.1:5500/Smarttrack%20originals/dashboard.html"
-            >Dashboard</a
-          >
-          <a
-            href="http://127.0.0.1:5500/Smarttrack%20originals/mycourses.html"
-            class="active"
-            >My courses</a
-          >
-          <a
-            href="http://127.0.0.1:5500/Smarttrack%20originals/basketanalysis.html"
-            >Basket Analysis</a
-          >
-          <a href="http://127.0.0.1:5500/Smarttrack%20originals/semplanner.html"
-            >Semester Planner</a
-          >
-          <a href="#">Reports</a>
+          <a href="/dashboard/">Dashboard</a>
+          <a href="/courses/">My courses</a>
+          <a href="/basket/">Basket Analysis</a>
+          <a href="/planner/">Semester Planner</a>
+          <a href="/reports/" class="active">Reports</a>
         </div>
         <!--navlinks-->
 
@@ -55,13 +45,17 @@
         </div>
         <!--topbar-->
         <div class="history">
-          <details>
+          <details data-sem="1">
+            #this is a built in html element allows to click and then expand
+            without involving js
             <summary>
+              {% comment %} things to be visible without clicking are the
+              details in summary {% endcomment %}
               <div class="sembar">
                 <h2>Semester 1</h2>
-                <p>Credits: 20</p>
-                <p>Courses: 5</p>
-                <p>SPI: 8.2</p>
+                <p class="credits">Credits: 0</p>
+                <p class="courses">Courses: 0</p>
+                <p class="spi">SPI: 0</p>
               </div>
             </summary>
             <div class="tablewrapper">
@@ -87,13 +81,13 @@
               </table>
             </div>
           </details>
-          <details>
+          <details data-sem="2">
             <summary>
               <div class="sembar">
                 <h2>Semester 1</h2>
-                <p>Credits: 20</p>
-                <p>Courses: 5</p>
-                <p>SPI: 8.2</p>
+                <p class="credits">Credits: 0</p>
+                <p class="courses">Courses: 0</p>
+                <p class="spi">SPI: 0</p>
               </div>
             </summary>
             <div class="tablewrapper">
@@ -119,13 +113,13 @@
               </table>
             </div>
           </details>
-          <details>
+          <details data-sem="3">
             <summary>
               <div class="sembar">
                 <h2>Semester 1</h2>
-                <p>Credits: 20</p>
-                <p>Courses: 5</p>
-                <p>SPI: 8.2</p>
+                <p class="credits">Credits: 0</p>
+                <p class="courses">Courses: 0</p>
+                <p class="spi">SPI: 0</p>
               </div>
             </summary>
             <div class="tablewrapper">
@@ -151,13 +145,13 @@
               </table>
             </div>
           </details>
-          <details>
+          <details data-sem="4">
             <summary>
               <div class="sembar">
                 <h2>Semester 1</h2>
-                <p>Credits: 20</p>
-                <p>Courses: 5</p>
-                <p>SPI: 8.2</p>
+                <p class="credits">Credits: 0</p>
+                <p class="courses">Courses: 0</p>
+                <p class="spi">SPI: 0</p>
               </div>
             </summary>
             <div class="tablewrapper">
@@ -183,13 +177,13 @@
               </table>
             </div>
           </details>
-          <details>
+          <details data-sem="5">
             <summary>
               <div class="sembar">
                 <h2>Semester 1</h2>
-                <p>Credits: 20</p>
-                <p>Courses: 5</p>
-                <p>SPI: 8.2</p>
+                <p class="credits">Credits: 0</p>
+                <p class="courses">Courses: 0</p>
+                <p class="spi">SPI: 0</p>
               </div>
             </summary>
             <div class="tablewrapper">
@@ -215,13 +209,13 @@
               </table>
             </div>
           </details>
-          <details>
+          <details data-sem="6">
             <summary>
               <div class="sembar">
                 <h2>Semester 1</h2>
-                <p>Credits: 20</p>
-                <p>Courses: 5</p>
-                <p>SPI: 8.2</p>
+                <p class="credits">Credits: 0</p>
+                <p class="courses">Courses: 0</p>
+                <p class="spi">SPI: 0</p>
               </div>
             </summary>
             <div class="tablewrapper">
@@ -247,13 +241,13 @@
               </table>
             </div>
           </details>
-          <details>
+          <details data-sem="7">
             <summary>
               <div class="sembar">
                 <h2>Semester 1</h2>
-                <p>Credits: 20</p>
-                <p>Courses: 5</p>
-                <p>SPI: 8.2</p>
+                <p class="credits">Credits: 0</p>
+                <p class="courses">Courses: 0</p>
+                <p class="spi">SPI: 0</p>
               </div>
             </summary>
             <div class="tablewrapper">
@@ -279,77 +273,13 @@
               </table>
             </div>
           </details>
-          <details>
+          <details data-sem="8">
             <summary>
               <div class="sembar">
                 <h2>Semester 1</h2>
-                <p>Credits: 20</p>
-                <p>Courses: 5</p>
-                <p>SPI: 8.2</p>
-              </div>
-            </summary>
-            <div class="tablewrapper">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Course</th>
-                    <th>Course Code</th>
-                    <th>Credits</th>
-                    <th>Grade</th>
-                    <th>Basket</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Maths</td>
-                    <td>MA 101</td>
-                    <td>4</td>
-                    <td>A</td>
-                    <td>Math</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </details>
-          <details>
-            <summary>
-              <div class="sembar">
-                <h2>Semester 1</h2>
-                <p>Credits: 20</p>
-                <p>Courses: 5</p>
-                <p>SPI: 8.2</p>
-              </div>
-            </summary>
-            <div class="tablewrapper">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Course</th>
-                    <th>Course Code</th>
-                    <th>Credits</th>
-                    <th>Grade</th>
-                    <th>Basket</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Maths</td>
-                    <td>MA 101</td>
-                    <td>4</td>
-                    <td>A</td>
-                    <td>Math</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </details>
-          <details>
-            <summary>
-              <div class="sembar">
-                <h2>Semester 1</h2>
-                <p>Credits: 20</p>
-                <p>Courses: 5</p>
-                <p>SPI: 8.2</p>
+                <p class="credits">Credits: 0</p>
+                <p class="courses">Courses: 0</p>
+                <p class="spi">SPI: 0</p>
               </div>
             </summary>
             <div class="tablewrapper">
@@ -381,5 +311,26 @@
       <!--main-->
     </div>
     <!--container-->
+    <script>
+      function loadHistory() {
+        fetch("/history-data/")
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            let semesters = document.querySelectorAll("details");
+            semesters.forEach((semester) => {
+              let sem = semester.dataset.sem;
+              let semesterData = data[sem];
+              semester.querySelector(".credits").innerText =
+                "Credits: " + semesterData.credits;
+              semester.querySelector(".courses").innerText =
+                "Courses: " + semesterData.courses;
+              semester.querySelector(".spi").innerText =
+                "SPI: " + semesterData.spi;
+            });
+          });
+      }
+      loadHistory();
+    </script>
   </body>
 </html>

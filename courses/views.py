@@ -8,7 +8,10 @@ from django.db.models import Q
 from django.views.decorators.csrf import ensure_csrf_cookie
 import json
 from .models import Student, CourseCatalog, CompletedCourse
+from collections import defaultdict
+from django.http import JsonResponse
 def signup_view(request):
+    
 
     if request.method == 'POST':
 
@@ -116,13 +119,13 @@ def courses_view(request):
         'mycourses.html'
     )
 
-def basket_view(request):
-    return render(request,'basketanalysis.html')
+def basket(request):
+    return render(request,'basket.html')
 
 def planner_view(request):
     return render(request,'semplanner.html')
 
-def reports_view(request):
+def reports(request):
     return render(request,'history.html')
 
 
@@ -205,6 +208,90 @@ def remove_course(request):
     return JsonResponse({
         "message": "Course removed successfully"
     })
+BASKET_REQUIREMENTS = {
+    "Mandatory": 32,
+    "Maths": 10,
+    "Science": 12,   # Placeholder for now
+    "HSS": 20,       # Placeholder
+    "MSE": 3,        # We'll update later
+}
+MANDATORY_PREFIXES = {
+    "ES 101",
+    "ES 112",
+    "ES 114",
+    "ES 115",
+    "ES 116",
+    "ES 117",
+    "ES 119",
+    "ES 243",
+    "BS 192",
+}
+def basket_analysis(request):
+    student = Student.objects.first()
+    completed_courses = CompletedCourse.objects.filter(student= student)
+    progress={}
+    # for completed in completed_courses:
+    #     code = completed.course.course_code
+    #     credits = completed.course.credits
+    #     print(code,credits)
+    for basket,required in BASKET_REQUIREMENTS.items():
+      progress[basket] = {
+        "completed": 0,
+        "required": required,
+      } 
+    for completed in completed_courses:
+        code = completed.course.course_code
+        credits = completed.course.credits
+        for mandatory in MANDATORY_PREFIXES: 
+            if code.startswith(mandatory):
+                progress["Mandatory"]["completed"] += credits
+                break
+   
+        if code.startswith("MA"):
+            progress["Maths"]["completed"]+=credits
+        elif code.startswith("PH") or code.startswith("CH"):
+            progress["Science"]["completed"]+=credits
+        elif code.startswith("HS") :
+            progress["HSS"]["completed"]+=credits
+        elif code.startswith("MSE") :
+            progress["MSE"]["completed"]+=credits
+        print(code,credits)
+        
+        
+    return JsonResponse(progress) 
 
+def history_data(request):
+    student = Student.objects.first()
+    completed_courses = CompletedCourse.objects.filter(student= student)
+    history ={}
+    for sem in range(1,9):
+        history[sem]={
+            "credits":0,
+            "courses": 0,
+            "spi": 0,
+            "grade_points": 0,
+            "course_list": [],
+        }
+    for completed in completed_courses:
+        sem = completed.semester
+
+        history[sem]["credits"] += completed.course.credits
+        history[sem]["courses"] += 1
+        history[sem]["grade_points"]+=(completed.grade*completed.course.credits)
+        history[sem]["course_list"].append({
+            "name": completed.course.course_name,
+            "code": completed.course.course_code,
+            "credits": completed.course.credits,
+            "grade": completed.grade,
+            "basket": completed.basket,
+        })
+    
+    for sem in history:
+        if history[sem]["credits"]>0:
+            history[sem]["spi"]= round(
+                history[sem]["grade_points"] /history[sem]["credits"],2
+            )
+
+    return JsonResponse(history)
 
 # Create your views here.

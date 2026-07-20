@@ -1,9 +1,10 @@
+{% load static %}
 <!doctype html>
 <html>
   <head>
     <title>smarttrack</title>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="mycourses.css" />
+    <link rel="stylesheet" href="{% static 'mycourses.css' %}" />
     <link rel="icon" href="hello.png" type="text" />
   </head>
 
@@ -22,20 +23,11 @@
         <!--profile-->
 
         <div class="navlinks">
-          <a href="http://127.0.0.1:5500/Smarttrack%20originals/dashboard.html"
-            >Dashboard</a
-          >
-          <a href="#" class="active">My courses</a>
-          <a
-            href="http://127.0.0.1:5500/Smarttrack%20originals/basketanalysis.html"
-            >Basket Analysis</a
-          >
-          <a href="http://127.0.0.1:5500/Smarttrack%20originals/semplanner.html"
-            >Semester Planner</a
-          >
-          <a href="http://127.0.0.1:5500/Smarttrack%20originals/history.html"
-            >Reports</a
-          >
+          <a href="/dashboard/">Dashboard</a>
+          <a href="/courses/" class="active">My courses</a>
+          <a href="/basket/">Basket Analysis</a>
+          <a href="/planner/">Semester Planner</a>
+          <a href="/reports/">Reports</a>
         </div>
         <!--navlinks-->
 

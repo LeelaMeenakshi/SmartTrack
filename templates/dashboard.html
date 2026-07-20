@@ -24,11 +24,11 @@
         <!--profile-->
 
         <div class="navlinks">
-          <a href="#" class="active">Dashboard</a>
-          <a href="/mycourses/">My courses</a>
-          <a href="/basketanalysis/">Basket Analysis</a>
-          <a href="/semplanner/">Semester Planner</a>
-          <a href="/coursehistory/">Reports</a>
+          <a href="/dashboard/" class="active">Dashboard</a>
+          <a href="/courses/">My courses</a>
+          <a href="/basket/">Basket Analysis</a>
+          <a href="/planner/">Semester Planner</a>
+          <a href="/reports/">Reports</a>
         </div>
         <!--navlinks-->
 
@@ -113,25 +113,7 @@
         </div>
 
         <div class="bandc">
-          <div class="baskets">
-            <h3>Basket Progress</h3>
-            <p>Mandatory</p>
-            <div class="progress-bar">
-              <div
-                class="progress-fill"
-                style="width: 80%; background: #2563eb"
-              ></div>
-              <p>32/40</p>
-
-              <p>Science Basket</p>
-              <!-- <div class="progress-bar">
-              <div
-                class="progress-fill"
-                style="width: 60%; background: #25eba2"
-              ></div> -->
-              <p>20/30</p>
-            </div>
-          </div>
+          <div class="baskets" id="basket-container"></div>
 
           <div class="trend">
             <h3>Semester GPA Trend</h3>
@@ -380,6 +362,43 @@
           });
       }
       loadSemester();
+    </script>
+    <script>
+      function loadBasketAnalysis() {
+        fetch("/basket-analysis/")
+          .then((response) => response.json())
+          .then((data) => {
+            let container = document.getElementById("basket-container");
+            console.log(container);
+            console.log(data);
+            container.innerHTML = "";
+            for (let basket in data) {
+              console.log("Creating", basket);
+              let card = document.createElement("div");
+              card.className = "basket-card";
+              let title = document.createElement("h3");
+              title.innerText = basket;
+              let completed = data[basket].completed;
+              let required = data[basket].required;
+              let credits = document.createElement("p");
+              credits.innerText = completed + " / " + required + " credits";
+              let percentage = Math.round((completed * 100) / required) + "%";
+              let progressBar = document.createElement("div");
+              progressBar.className = "progress-bar";
+              let progressFill = document.createElement("div");
+              progressFill.className = "progress-fill";
+              console.log(percentage);
+              progressFill.style.width = percentage;
+              progressBar.append(progressFill);
+              card.append(title);
+              card.append(credits);
+              card.append(progressBar);
+              container.append(card);
+            }
+            console.log(data);
+          });
+      }
+      loadBasketAnalysis();
     </script>
   </body>
   <script>
