@@ -1,10 +1,12 @@
 from django.db import models
 from django.db import models
+from django.contrib.auth.models import User
 
 class Student(models.Model):
+    # user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    roll_number = models.CharField(max_length=20)
+    roll_number = models.CharField(max_length=20, blank=True, default="")
     discipline = models.CharField(max_length=50, default="CSE")
     batch_year = models.CharField(max_length=20, default="2025-26")
     total_credits_required = models.IntegerField(default=173)
@@ -39,8 +41,5 @@ class CompletedCourse(models.Model):
     grade = models.FloatField()
     course= models.ForeignKey(CourseCatalog, on_delete = models.CASCADE)
     basket = models.CharField(max_length=50)
-
-
-    
 
 # Create your models here.

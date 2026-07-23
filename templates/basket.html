@@ -31,7 +31,9 @@
         <!--navlinks-->
 
         <div class="logout">
-          <button>Logout</button>
+          <a href="{% url 'logout' %}">
+            <button class="logoutbtn">Logout</button>
+          </a>
         </div>
         <!--logout-->
       </div>
@@ -46,47 +48,22 @@
         <!--topbar-->
 
         <div class="cardscontainer">
+          {% for card in cards %}
           <div class="card">
-            <h2>Institute Mandatory courses</h2>
+            <h2>{{card.name}}</h2>
             <div class="progressbar">
-              <div class="progressfill"></div>
+              <div
+                class="progressfill"
+                style="width: {{ card.percentage }}%;"
+              ></div>
             </div>
-            <p>32/40</p>
-            <h3>Completed</h3>
-            <p>CS 101</p>
-            <p>CS 202</p>
+            <p>Required Credits : {{ card.required }}</p>
+            <p>Completed : {{ card.completed }}</p>
+            {% for course in card.course_list %}
+            <p>{{ course.code }} - {{ course.name }}</p>
+            {% endfor %}
           </div>
-          <!--card-->
-
-          <div class="card">
-            <h2>Science Basket</h2>
-            <div class="progressbar">
-              <div class="progressfill"></div>
-            </div>
-            <p>20/30</p>
-            <h3>Completed</h3>
-            <p>SC 101</p>
-            <p>SC 202</p>
-          </div>
-          <!--card-->
-
-          <div class="card">
-            <h2>Mathematics Basket</h2>
-            <p>32/40</p>
-            <h3>Completed</h3>
-            <p>MA 101</p>
-            <p>MA 202</p>
-          </div>
-          <!--card-->
-
-          <div class="card">
-            <h2>Humanities and Social Sciences</h2>
-            <p>32/40</p>
-            <h3>Completed</h3>
-            <p>HS 101</p>
-            <p>HS 202</p>
-          </div>
-          <!--card-->
+          {% endfor %}
         </div>
         <!--cardscontainer-->
       </div>

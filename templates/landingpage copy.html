@@ -1,10 +1,11 @@
+{% load static %}
 <!doctype html>
 <html>
   <head>
     <title>smarttrack</title>
     <meta charset="UTF-8" />
-    <link rel="icon" href="page.png" type="image/x-text" />
-    <link rel="stylesheet" href="landingpage.css" />
+    <link rel="icon" href="{% static 'page.png' %}" type="image/x-text" />
+    <link rel="stylesheet" href="{% static 'landingpage.css' %}" />
   </head>
   <body>
     <nav>
@@ -12,7 +13,7 @@
         <h1>Smart <span>Track</span></h1>
       </div>
       <div class="navlinks">
-        <a href="#">Home</a>
+        <a href="">Home</a>
         <a href="#">Features</a>
       </div>
       <div class="authbuttons">

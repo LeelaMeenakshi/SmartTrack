@@ -33,7 +33,7 @@
         <!--navlinks-->
 
         <div class="logout">
-          <a href="/logout/" class="logoutbtn">Logout</a>
+          <a href="{% url 'logout' %}" class="logoutbtn">Logout</a>
         </div>
         <!--logout-->
       </div>
@@ -122,15 +122,30 @@
         </div>
       </div>
     </div>
+    {{ baskets|json_script:"basket-data" }}
+
     <script>
       function showSemester() {
         document.getElementById("semester-box").style.display = "block";
       }
     </script>
     <script>
+      const baskets = JSON.parse(document.getElementById("basket-data").textContent);
       let selectedCourses = {};
       for (let i = 1;i<=8; i ++){
         selectedCourses[i]= [];
+            // If any saved semester exists, auto-select the first one so
+            // previously saved courses are displayed in the UI.
+            const savedSems = Object.keys(selectedCourses).filter(
+              (k) => selectedCourses[k] && selectedCourses[k].length > 0
+            );
+            if (savedSems.length > 0) {
+              const sel = document.querySelector('#semester-box select');
+              if (sel) {
+                sel.value = savedSems[0];
+                showChosenSemester(sel);
+              }
+            }
         console.log(selectedCourses);
       }
       function displayCourse(course){
@@ -152,39 +167,31 @@
 
         let basketSelect = document.createElement("select");
         //course.basket = basketSelect.value;
-        let option0 = document.createElement("option");
-        option0.value = "";
-        option0.innerText = "Select";
-        basketSelect.append(option0);
-        let option1 = document.createElement("option");
-        option1.value="Maths";
-        option1.innerText = "Maths";
-        basketSelect.append(option1);
-        let option2 = document.createElement("option");
-        option2.value="Science";
-        option2.innerText = "Science";
-        basketSelect.append(option2);
-        let option3 = document.createElement("option");
-        option3.value="HSS";
-        option3.innerText = "HSS";
-        basketSelect.append(option3);
-        let option4 = document.createElement("option");
-        option4.value="Mandatory";
-        option4.innerText = "Mandatory";
-        basketSelect.append(option4);
-        let removeBtn = document.createElement("button");
-        basketSelect.value = course.basket || "";
+        let defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.innerText = "Select Basket";
+        basketSelect.append(defaultOption);
+        for (let basket of baskets){
+          let option = document.createElement("option");
+          option.value = basket;
+          option.innerText = basket;
+          if (course.basket === basket){
+            option.selected = true;
+          }
+          basketSelect.append(option);
+        }
 
         basketSelect.onchange = function(){
           course.basket = basketSelect.value
         }
 
-        removeBtn.onclick= function(){
+        let removeBtn = document.createElement("button");
+        removeBtn.onclick= async function(){
           let csrftoken = getCookie("csrftoken");
           console.log("remove clicked");
           console.log(course);
           console.log(selectedSemester);
-          fetch("/remove-course/",{
+          const resp = await fetch("/remove-course/",{
             method:"POST",
             headers:{
               "Content-Type":"application/json",
@@ -195,11 +202,18 @@
                 course_code : course.course_code
               })
             });
+          try{
+            const result = await resp.json();
+            console.log(result);
+          }catch(e){
+            console.warn('remove-course returned no json', e);
+          }
 
           selectedItem.remove();
           selectedCourses[selectedSemester]= selectedCourses[selectedSemester].filter(existingCourse=>{
             return existingCourse.course_code !== course.course_code;
           });
+          loadBasketAnalysis();
         }
         p.innerText= course.course_code + " " + course.course_name
         removeBtn.className = "remove-course-btn";
@@ -259,6 +273,10 @@
                 btn.onclick= function(){
                   console.log(course);
                   //let selectedBox = document.getElementById("selected-courses");
+                  if (!selectedSemester) {
+                    alert("Please select a semester first.");
+                    return;
+                  }
                   let duplicate = false;
 
                   // for already existing courses, check if the present course id
@@ -333,14 +351,14 @@
 
         return cookieValue;
       }
-      function saveSemester() {
+      async function saveSemester() {
         console.log("save button is clicked");
         let data = {
           semester: selectedSemester,
           courses: selectedCourses[selectedSemester],
         };
         let csrftoken = getCookie("csrftoken");
-        fetch("/save-semester/", {
+        const resp = await fetch("/save-semester/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -348,6 +366,15 @@
           },
           body: JSON.stringify(data),
         });
+        try {
+          const result = await resp.json();
+          console.log(result);
+        } catch (e) {
+          console.warn("save-semester returned no json", e);
+        }
+        // refresh local data and basket analysis to reflect saved changes
+        loadSemester();
+        loadBasketAnalysis();
         console.log(data);
       }
       function loadSemester() {

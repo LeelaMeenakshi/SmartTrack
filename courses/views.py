@@ -10,6 +10,9 @@ import json
 from .models import Student, CourseCatalog, CompletedCourse
 from collections import defaultdict
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from .helpers import calculate_progress
 def signup_view(request):
     
 
@@ -18,6 +21,7 @@ def signup_view(request):
         name = request.POST.get('name')
         email = request.POST.get('email')
         password = request.POST.get('password')
+        branch = request.POST.get("branch")
 
         if User.objects.filter(username=email).exists():
 
@@ -33,6 +37,12 @@ def signup_view(request):
             email=email,
             password=password,
             first_name=name
+        )
+        Student.objects.create(
+            name=name,
+            email=email,
+            discipline=branch,
+            roll_number="",
         )
 
         login(request, user)
@@ -78,27 +88,8 @@ def login_view(request):
 
 from .models import Student
 from .models import Course
-@ensure_csrf_cookie
-def dashboard_view(request):
-    student = Student.objects.first()
-    courses = Course.objects.filter(
-        student = student
-    )
-    catalog_courses = CourseCatalog.objects.all()[:10]
-    print(catalog_courses)
 
-    return render(
-        request,
-        'dashboard.html',
-        {
-            'user':request.user,
-            'student': student,
-            'courses': courses,
-            'catalog_courses': catalog_courses
-        }
-    )
-
-
+@login_required
 def logout_view(request):
 
     logout(request)
@@ -112,23 +103,22 @@ def index_view(request):
         request,
         'landingpage copy.html'
     )
-
+@login_required
 def courses_view(request):
     return render(
         request,
         'mycourses.html'
     )
+from .basket_config import COMMON_BASKETS, BRANCH_BASKETS
 
-def basket(request):
-    return render(request,'basket.html')
-
+@login_required
 def planner_view(request):
     return render(request,'semplanner.html')
-
+@login_required
 def reports(request):
     return render(request,'history.html')
 
-
+@login_required
 def search_course(request):
     query = request.GET.get("q")
     courses = CourseCatalog.objects.filter(
@@ -144,11 +134,11 @@ def search_course(request):
     return JsonResponse({
         "courses":results
     })
-
+@login_required
 def save_semester(request):
     data = json.loads(request.body)
     print(data)
-    student = Student.objects.first()
+    student = Student.objects.get(email=request.user.email)
     semester = data["semester"]
     CompletedCourse.objects.filter(
         student = student,
@@ -170,9 +160,9 @@ def save_semester(request):
     return JsonResponse({
         "message":"Saved successfully"
     })
-
+@login_required
 def get_semesters(request):
-    student = Student.objects.first()
+    student = Student.objects.get(email=request.user.email)
     completed_courses = CompletedCourse.objects.filter(
         student = student
     )
@@ -192,11 +182,11 @@ def get_semesters(request):
     return JsonResponse({
         "semesters": semesters
     })
-
+@login_required
 def remove_course(request):
     data = json.loads(request.body)
     print(data)
-    student = Student.objects.first()
+    student = Student.objects.get(email=request.user.email)
     semester = data["semester"]
     course_code = data["course_code"]
     completed_course = CompletedCourse.objects.get(
@@ -226,42 +216,110 @@ MANDATORY_PREFIXES = {
     "ES 243",
     "BS 192",
 }
-def basket_analysis(request):
-    student = Student.objects.first()
-    completed_courses = CompletedCourse.objects.filter(student= student)
-    progress={}
-    # for completed in completed_courses:
-    #     code = completed.course.course_code
-    #     credits = completed.course.credits
-    #     print(code,credits)
-    for basket,required in BASKET_REQUIREMENTS.items():
-      progress[basket] = {
-        "completed": 0,
-        "required": required,
-      } 
-    for completed in completed_courses:
-        code = completed.course.course_code
-        credits = completed.course.credits
-        for mandatory in MANDATORY_PREFIXES: 
-            if code.startswith(mandatory):
-                progress["Mandatory"]["completed"] += credits
-                break
-   
-        if code.startswith("MA"):
-            progress["Maths"]["completed"]+=credits
-        elif code.startswith("PH") or code.startswith("CH"):
-            progress["Science"]["completed"]+=credits
-        elif code.startswith("HS") :
-            progress["HSS"]["completed"]+=credits
-        elif code.startswith("MSE") :
-            progress["MSE"]["completed"]+=credits
-        print(code,credits)
+from .basket_config import COMMON_BASKETS, BRANCH_BASKETS
+# @login_required
+# def basket_analysis(request):
+#     student = Student.objects.get(email=request.user.email)
+#     branch = student.discipline
+#     all_baskets = {}
+#     all_baskets.update(COMMON_BASKETS)
+#     all_baskets.update(BRANCH_BASKETS[branch])
+#     completed_courses = CompletedCourse.objects.filter(student= student)
+#     progress={}
+#     # for completed in completed_courses:
+#     #     code = completed.course.course_code
+#     #     credits = completed.course.credits
+#     #     print(code,credits)
+#     for basket,required in all_baskets.items():
+#       progress[basket] = {
+#         "completed": 0,
+#         "required": required,
+#         "course_list": []
+#       } 
+#     for completed in completed_courses:
+#         code = completed.course.course_code
+#         credits = completed.course.credits
+#         basket = completed.basket
+#         progress[basket]["completed"] += credits
+#         progress[basket]["course_list"].append({
+#             "name": completed.course.course_name,
+#             "code": completed.course.course_code,
+#             "credits": completed.course.credits,
+#             "grade":completed.grade,
+#         })
+           
         
-        
-    return JsonResponse(progress) 
+#     return JsonResponse(progress, safe= False) 
 
+from .basket_config import COMMON_BASKETS, BRANCH_BASKETS
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def basket(request):
+
+    student = Student.objects.get(email=request.user.email)
+
+    progress = calculate_progress(student)
+
+
+    cards= []
+    for basket,data in progress.items():
+        cards.append({
+            "name":basket,
+            "completed":data["completed"],
+            "required":data["required"],
+            "course_list":data["course_list"],
+            "percentage": round((data["completed"]/data["required"])*100,2) if data["required"]>0 else 0
+        })
+
+    return render(
+        request,
+        "basket.html",
+        {
+            "student": student,
+            "cards": cards,
+        }
+    )
+
+@login_required
+def basket_analysis(request):
+    student = Student.objects.get(email=request.user.email)
+
+    progress = calculate_progress(student)
+
+    return JsonResponse(progress, safe=False)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_view(request):
+    student = Student.objects.get(email=request.user.email)
+    branch = student.discipline
+    all_baskets = {}
+    all_baskets.update(COMMON_BASKETS)
+    all_baskets.update(BRANCH_BASKETS[branch])
+    
+    courses = Course.objects.filter(
+        student = student
+    )
+    catalog_courses = CourseCatalog.objects.all()[:10]
+    print(catalog_courses)
+
+    return render(
+        request,
+        'dashboard.html',
+        {
+            'user':request.user,
+            'student': student,
+            'courses': courses,
+            'catalog_courses': catalog_courses,
+            "baskets": list(all_baskets.keys())
+        }
+    )
+
+
+@login_required
 def history_data(request):
-    student = Student.objects.first()
+    student = Student.objects.get(email=request.user.email)
     completed_courses = CompletedCourse.objects.filter(student= student)
     history ={}
     for sem in range(1,9):
