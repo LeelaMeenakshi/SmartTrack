@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .models import Student, Course, CourseCatalog
+from .models import Student, Course, CourseCatalog , SemesterPlan
 from django.http import JsonResponse
 from django.db.models import Q
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -12,7 +12,9 @@ from collections import defaultdict
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from .helpers import calculate_progress
+from .helpers import calculate_history, calculate_progress
+from django.views.decorators.http import require_POST
+import json
 def signup_view(request):
     
 
@@ -113,7 +115,47 @@ from .basket_config import COMMON_BASKETS, BRANCH_BASKETS
 
 @login_required
 def planner_view(request):
-    return render(request,'semplanner.html')
+    student = Student.objects.get(email=request.user.email)
+    branch = student.discipline
+    all_baskets = {}
+    all_baskets.update(COMMON_BASKETS)
+    all_baskets.update(BRANCH_BASKETS[branch])
+    
+    
+    history, available_semesters = calculate_history(student)
+    completed_credits = sum(history[sem]["credits"] for sem in history)
+    completed_ids= CompletedCourse.objects.filter(student=student).values_list('course_id', flat=True)
+    planned_ids = SemesterPlan.objects.filter( student=student).values_list("course_id", flat=True)
+    planned_courses = SemesterPlan.objects.filter(student=student)
+    planned_credits= 0
+    for plan in planned_courses:
+        planned_credits += plan.course.credits
+
+    total_credits = completed_credits + planned_credits
+
+    if planned_credits < 20:
+        load_status = "Below Recommended"
+    elif planned_credits <=24:
+        load_status = "In recommended range"
+    elif planned_credits >28:
+        load_status = "Exceeds default maximum load"
+    available_courses= CourseCatalog.objects.exclude(id__in=completed_ids).exclude(id__in=planned_ids)
+    print("Completed:", list(completed_ids))
+    print("Planned:", list(planned_ids))
+    print("Available:", available_courses.count())
+    progress = calculate_progress(student)
+    print(progress)
+    return render(request,'semplanner.html',{
+        "student": student,
+        "available_semesters":available_semesters,
+        "catalog_courses": available_courses,
+        "planned_courses": planned_courses,
+        "planned_credits": planned_credits,
+        "baskets": list(all_baskets.keys()),
+        "load_status": load_status,
+        "total_credits": total_credits,
+        "progress": progress,
+    })
 @login_required
 def reports(request):
     return render(request,'history.html')
@@ -321,28 +363,8 @@ def dashboard_view(request):
 def history_data(request):
     student = Student.objects.get(email=request.user.email)
     completed_courses = CompletedCourse.objects.filter(student= student)
-    history ={}
-    for sem in range(1,9):
-        history[sem]={
-            "credits":0,
-            "courses": 0,
-            "spi": 0,
-            "grade_points": 0,
-            "course_list": [],
-        }
-    for completed in completed_courses:
-        sem = completed.semester
+    history,available_semesters = calculate_history(student)
 
-        history[sem]["credits"] += completed.course.credits
-        history[sem]["courses"] += 1
-        history[sem]["grade_points"]+=(completed.grade*completed.course.credits)
-        history[sem]["course_list"].append({
-            "name": completed.course.course_name,
-            "code": completed.course.course_code,
-            "credits": completed.course.credits,
-            "grade": completed.grade,
-            "basket": completed.basket,
-        })
     
     for sem in history:
         if history[sem]["credits"]>0:
@@ -352,4 +374,76 @@ def history_data(request):
 
     return JsonResponse(history)
 
+
+@login_required
+def planner_search_course(request):
+    query = request.GET.get("q", "").strip()
+
+    student = Student.objects.get(email=request.user.email)
+
+    completed_ids = CompletedCourse.objects.filter(
+        student=student
+    ).values_list("course_id", flat=True)
+
+    planned_ids = SemesterPlan.objects.filter(
+        student=student
+    ).values_list("course_id", flat=True)
+
+    courses = (
+        CourseCatalog.objects
+        .exclude(id__in=completed_ids)
+        .exclude(id__in=planned_ids)
+        .filter(
+            course_name__icontains=query
+        )[:10]
+    )
+
+    data = []
+
+    for course in courses:
+        data.append({
+            "code": course.course_code,
+            "name": course.course_name,
+            "credits": course.credits,
+        })
+
+    return JsonResponse(data, safe=False)
+
+def add_planned_course(request):
+
+    student = Student.objects.get(email=request.user.email)
+
+    data = json.loads(request.body)
+
+    semester = data.get("semester")
+    course_code = data.get("course_code")
+    basket = data.get("basket")
+
+    course = CourseCatalog.objects.get(course_code=course_code)
+
+    SemesterPlan.objects.create(
+        student=student,
+        semester=semester,
+        course=course,
+        basket=basket,
+    )
+
+    return JsonResponse({"success": True})
+
+@require_POST
+@login_required
+def remove_planned_course(request):
+
+    student = Student.objects.get(email=request.user.email)
+
+    data = json.loads(request.body)
+
+    plan_id = data.get("plan_id")
+
+    SemesterPlan.objects.filter(
+        id=plan_id,
+        student=student
+    ).delete()
+
+    return JsonResponse({"success": True})
 # Create your views here.

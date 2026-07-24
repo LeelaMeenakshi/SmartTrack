@@ -48,13 +48,10 @@
           </div>
           <!--text-->
           <div class="sem">
-            <select>
-              <option>Semester 3</option>
-              <option>Semester 4</option>
-              <option>Semester 5</option>
-              <option>Semester 6</option>
-              <option>Semester 7</option>
-              <option>Semester 8</option>
+            <select id="semester">
+              {% for sem in available_semesters %}
+              <option value="{{ sem }}">Semester {{ sem }}</option>
+              {% endfor %}
             </select>
           </div>
           <!--sem-->
@@ -63,18 +60,17 @@
         <div class="creditstatus">
           <div class="creditsplan">
             <h2>Credits planned this sem</h2>
-            <h1>15</h1>
+            <h1>{{ planned_credits}}</h1>
           </div>
           <!--creditsplan-->
           <div class="creditload">
-            <h2>Credit load status</h2>
-            <h1 class="below">Below Recommended</h1>
-            <h3>Recommended: 18-24</h3>
+            <h1>{{ load_status }}</h1>
+            <h3>Recommended: 20-24</h3>
           </div>
           <!--creditsload-->
           <div class="total">
-            <h2>Total after planning</h2>
-            <h1>111/173</h1>
+            <h2>Total credits after planning</h2>
+            <h1>{{ total_credits }}/173</h1>
           </div>
           <!--total-->
         </div>
@@ -85,14 +81,25 @@
             <div><h2>Add Course to Plan</h2></div>
             <div class="secpart">
               <h3>Select Course</h3>
-              <select>
-                <option>CS 101 Computers</option>
-                <option>HS 112 Writing</option>
-              </select>
+              <input
+                type="text"
+                id="planner-course-search"
+                placeholder="Search for a course"
+              />
+              <div id="planner-search-results"></div>
             </div>
             <!--secpart-->
+            <div class="secpart">
+              <h3>Select Basket</h3>
+              <select id="basket-select">
+                {% for basket in baskets %}
+                <option value="{{ basket }}">{{ basket }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
             <div class="but">
-              <button>+ Add to Plan</button>
+              <button id="add-course-btn">+ Add to Plan</button>
             </div>
             <!--but-->
           </div>
@@ -111,30 +118,20 @@
                   </tr>
                 </thead>
                 <tbody>
+                  {% for plan in planned_courses %}
+
                   <tr>
-                    <td>ComputerNetworks</td>
-                    <td>CS 101</td>
-                    <td>4</td>
-                    <td>Thoery</td>
+                    <td>{{ plan.course.course_name }}</td>
+                    <td>{{ plan.course.course_code }}</td>
+                    <td>{{ plan.course.credits }}</td>
+                    <td>{{ plan.basket }}</td>
+                    <td>
+                      <button class="remove-btn" data-plan-id="{{ plan.id }}">
+                        Remove
+                      </button>
+                    </td>
                   </tr>
-                  <tr>
-                    <td>ComputerNetworks</td>
-                    <td>CS 101</td>
-                    <td>4</td>
-                    <td>Thoery</td>
-                  </tr>
-                  <tr>
-                    <td>ComputerNetworks</td>
-                    <td>CS 101</td>
-                    <td>4</td>
-                    <td>Thoery</td>
-                  </tr>
-                  <tr>
-                    <td>ComputerNetworks</td>
-                    <td>CS 101</td>
-                    <td>4</td>
-                    <td>Thoery</td>
-                  </tr>
+                  {% endfor %}
                 </tbody>
               </table>
             </div>
@@ -143,7 +140,26 @@
           <!--courseslist-->
         </div>
         <!--courses-->
+
         <div class="basket">
+          {% for basket,data in progress.items %}
+          <div class="basketcard">
+            <h3>{{ basket }} ({{ data.required }} credits)</h3>
+            <div class="progress">
+              <div
+                class="completed"
+                style="width:{% widthratio data.completed data.required 100 %}%;"
+              ></div>
+              <div
+                class="planned"
+                style="
+                left:{% widthratio data.completed data.required 100 %}%;
+                width:{% widthratio data.planned data.required 100 %}%;"
+              ></div>
+            </div>
+            <p>{{ data.completed }} + {{ data.planned }}</p>
+          </div>
+          {% endfor %} {% comment %}
           <div class="basketcard">
             <h3>HSS (20 credits)</h3>
             <div class="progress">
@@ -152,99 +168,130 @@
             </div>
             <p>10 +6</p>
           </div>
-          <div class="basketcard">
-            <h3>HSS (20 credits)</h3>
-            <div class="progress">
-              <div class="completed"></div>
-              <div class="planned"></div>
-            </div>
-            <p>10 +6</p>
-          </div>
-          <div class="basketcard">
-            <h3>HSS (20 credits)</h3>
-            <div class="progress">
-              <div class="completed"></div>
-              <div class="planned"></div>
-            </div>
-            <p>10 +6</p>
-          </div>
-          <div class="basketcard">
-            <h3>HSS (20 credits)</h3>
-            <div class="progress">
-              <div class="completed"></div>
-              <div class="planned"></div>
-            </div>
-            <p>10 +6</p>
-          </div>
-          <div class="basketcard">
-            <h3>HSS (20 credits)</h3>
-            <div class="progress">
-              <div class="completed"></div>
-              <div class="planned"></div>
-            </div>
-            <p>10 +6</p>
-          </div>
-          <div class="basketcard">
-            <h3>HSS (20 credits)</h3>
-            <div class="progress">
-              <div class="completed"></div>
-              <div class="planned"></div>
-            </div>
-            <p>10 +6</p>
-          </div>
-          <div class="basketcard">
-            <h3>HSS (20 credits)</h3>
-            <div class="progress">
-              <div class="completed"></div>
-              <div class="planned"></div>
-            </div>
-            <p>10 +6</p>
-          </div>
-          <div class="basketcard">
-            <h3>HSS (20 credits)</h3>
-            <div class="progress">
-              <div class="completed"></div>
-              <div class="planned"></div>
-            </div>
-            <p>10 +6</p>
-          </div>
-          <div class="basketcard">
-            <h3>HSS (20 credits)</h3>
-            <div class="progress">
-              <div class="completed"></div>
-              <div class="planned"></div>
-            </div>
-            <p>10 +6</p>
-          </div>
-          <div class="basketcard">
-            <h3>HSS (20 credits)</h3>
-            <div class="progress">
-              <div class="completed"></div>
-              <div class="planned"></div>
-            </div>
-            <p>10 +6</p>
-          </div>
-          <div class="basketcard">
-            <h3>HSS (20 credits)</h3>
-            <div class="progress">
-              <div class="completed"></div>
-              <div class="planned"></div>
-            </div>
-            <p>10 +6</p>
-          </div>
-          <div class="basketcard">
-            <h3>HSS (20 credits)</h3>
-            <div class="progress">
-              <div class="completed"></div>
-              <div class="planned"></div>
-            </div>
-            <p>10 +6</p>
-          </div>
+          {% endcomment %}
         </div>
         <!--basket-->
       </div>
       <!--main-->
     </div>
     <!--container-->
+    <p>{{ catalog_courses|length }}</p>
+    <script>
+      const catalogCourses = [
+        {% for course in catalog_courses %}
+        {
+          code: "{{ course.course_code }}",
+          name: "{{ course.course_name|escapejs }}",
+          credits: {{ course.credits }}
+        },
+        {% endfor %}
+      ];
+    </script>
+    <script>
+      const searchInput = document.getElementById("planner-course-search");
+      const resultsBox = document.getElementById("planner-search-results");
+      searchInput.addEventListener("input", function () {
+        let query = this.value.toLowerCase().trim();
+        resultsBox.innerHTML = "";
+        if (query.length < 2) return;
+        const matches = catalogCourses.filter(
+          (course) =>
+            course.code.toLowerCase().includes(query) ||
+            course.name.toLowerCase().includes(query),
+        );
+        matches.slice(0, 10).forEach((course) => {
+          let div = document.createElement("div");
+          div.className = "search-result";
+          div.innerHTML = `<b>${course.code}</b> - ${course.name}`;
+          div.onclick = function () {
+            searchInput.value = `${course.code} - ${course.name}`;
+            searchInput.dataset.code = course.code;
+            searchInput.dataset.credits = course.credits;
+            resultsBox.innerHTML = "";
+            console.log(course);
+          };
+          resultsBox.appendChild(div);
+        });
+      });
+    </script>
+    <script>
+      const addButton = document.getElementById("add-course-btn");
+
+      addButton.addEventListener("click", function () {
+        const courseCode = searchInput.dataset.code;
+        const basket = document.getElementById("basket-select").value;
+        const semester = document.getElementById("semester").value;
+
+        if (!courseCode) {
+          alert("Please select a course");
+          return;
+        }
+
+        if (!basket) {
+          alert("Please select a basket");
+          return;
+        }
+
+        fetch("/planner/add-course/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+          },
+          body: JSON.stringify({
+            course_code: courseCode,
+            basket: basket,
+            semester: semester,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+          });
+      });
+
+      function getCookie(name) {
+        let cookieValue = null;
+
+        if (document.cookie && document.cookie !== "") {
+          const cookies = document.cookie.split(";");
+
+          for (let cookie of cookies) {
+            cookie = cookie.trim();
+
+            if (cookie.startsWith(name + "=")) {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1),
+              );
+              break;
+            }
+          }
+        }
+
+        return cookieValue;
+      }
+
+      document.querySelectorAll(".remove-btn").forEach((button) => {
+        button.addEventListener("click", function () {
+          const planId = this.dataset.planId;
+
+          fetch("/planner/remove-course/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCookie("csrftoken"),
+            },
+            body: JSON.stringify({ plan_id: planId }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              if (data.success) {
+                location.reload();
+              }
+            });
+        });
+      });
+    </script>
   </body>
 </html>

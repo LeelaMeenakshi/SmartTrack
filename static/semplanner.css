@@ -169,21 +169,26 @@ tbody tr{
     border-radius: 10px;
 }
 .progress{
+    position: relative;
     height: 12px;
     width: 100%;
     background-color: #ccc;
     border-radius: 20px;
-    display: flex;
     overflow: hidden;
 }
 .completed{
-    width:50%;        /* 10/20 */
+    position: absolute;
+    height: 100%;
+    left: 0;
+    right: 0;       /* 10/20 */
     background:#2563eb;
 }
 
 .planned{
-    width:30%;        /* 6/20 */
-    background:#7cb4ff;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: #7cb4ff;
 }
 .basket{
     display: grid;
@@ -193,4 +198,25 @@ tbody tr{
     overflow-y: auto;
     flex: 1;
     min-height: 0;
+}
+#planner-search-results{
+    position:absolute;
+    width:240px;
+    background:white;
+    border:1px solid #ccc;
+    max-height:180px;
+    overflow-y:auto;
+    z-index:1000;
+}
+
+.search-result{
+    padding:8px;
+    cursor:pointer;
+}
+
+.search-result:hover{
+    background:#dce8ff;
+}
+.secpart{
+    position:relative;
 }

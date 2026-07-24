@@ -42,4 +42,17 @@ class CompletedCourse(models.Model):
     course= models.ForeignKey(CourseCatalog, on_delete = models.CASCADE)
     basket = models.CharField(max_length=50)
 
+class SemesterPlan(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    semester = models.IntegerField()
+    course = models.ForeignKey(CourseCatalog, on_delete=models.CASCADE)
+    basket = models.CharField(max_length=50)
+    class Meta:
+        constraints= [
+            models.UniqueConstraint(
+                fields = ['student', 'course'],
+                name = "unique_student_course",
+            )
+        ]
+
 # Create your models here.

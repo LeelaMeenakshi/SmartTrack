@@ -23,5 +23,17 @@ path("get-semesters/", views.get_semesters, name="get_semesters"),
 path("remove-course/", views.remove_course, name="remove_course"),
 path("basket-analysis/", views.basket_analysis, name="basket_analysis"),
 path("history-data/", views.history_data, name="history_data"),
+path(
+    "planner-search-course/",
+    views.planner_search_course,
+    name="planner_search_course",
+),
+path("planner/add-course/", views.add_planned_course, name="add_planned_course"),
+path(
+    "planner/remove-course/",
+    views.remove_planned_course,
+    name="remove_planned_course"
+),
+
 
 ]

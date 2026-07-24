@@ -26,23 +26,17 @@ span{
 .inputs{
     display: flex;
     flex-direction: column;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     margin: 50px auto;
-    padding: 40px;
+    padding: 12px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 4px 12px #2563EB;
-    /* color: #2563EB; */
-    display: flex;
-    flex-direction: column;
     gap: 8px;
     font-size: 22px;
     text-align: initial;
-    min-width: 40%;
-    /* width: 70%; */
-    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 8px;
     box-sizing: border-box;
 }
 .inputs button{
@@ -51,16 +45,13 @@ span{
     font-family: 'Times New Roman', Times, serif;
     padding: 12px;
     margin-top: 15px;
-    background-color: #2563EB;
-    color: white;
     border: none;
     border-radius: 8px;
     font-size: 18px;
     cursor: pointer;
-    width: 150px;
-    font-family: 'Times New Roman', Times, serif;
+    width: auto;
+    max-width: 180px;
     align-items: center;
-
 }
 button:hover{
     transform: scale(1.10);
@@ -72,6 +63,37 @@ p{
 .ca{
     display: block;
     margin: 15px auto;
+}
+.inputs input,
+.inputs select,
+.inputs textarea{
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 18px;
+    padding: 8px;
+}
+
+
+.inputs select{
+    font-size: 16px;
+    line-height: 1.2;
+}
+.inputs select option{
+    font-size: 16px;
+}
+
+
+*{
+    box-sizing: border-box;
+}
+
+@media (max-width: 420px){
+    nav{padding:8px 12px}
+    .homelink a{font-size:18px}
+    .inputs{margin:20px 12px; font-size:18px; padding:10px}
+    .inputs select{font-size:14px}
+    .inputs select option{font-size:14px}
+    .footer-content{padding:8px 12px}
 }
 .footer-content{
     background-color:  #0F172A;

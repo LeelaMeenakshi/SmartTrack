@@ -4,6 +4,7 @@
   <head>
     <title>smarttrack</title>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{% static 'dashboard.css' %}" />
     <link rel="icon" href="hello.png" type="text" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -40,6 +41,9 @@
       <!--sidebar-->
       <div class="main">
         <div class="topbar">
+          <button id="menu-btn" aria-expanded="false" aria-label="Open sidebar">
+            ☰
+          </button>
           <div class="welcome">
             <h1>Welcome back, {{ user.first_name }}!</h1>
             <h2>Here is your academic overview</h2>
@@ -426,6 +430,33 @@
           });
       }
       loadBasketAnalysis();
+    </script>
+    <script>
+      const menuBtn = document.getElementById("menu-btn");
+      const sidebar = document.querySelector(".sidebar");
+      // Toggle `open` on the sidebar for small screens. `active` is used
+      // elsewhere for nav link highlighting, so use a dedicated class.
+      menuBtn.addEventListener("click", function (e) {
+        const isOpen = sidebar.classList.toggle("open");
+        menuBtn.setAttribute("aria-expanded", isOpen);
+        e.stopPropagation();
+      });
+
+      // Close sidebar when clicking outside (on small screens)
+      document.addEventListener("click", function (e) {
+        if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+          sidebar.classList.remove("open");
+          menuBtn.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      // Close sidebar when resizing to large screens
+      window.addEventListener("resize", function () {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove("open");
+          menuBtn.setAttribute("aria-expanded", "false");
+        }
+      });
     </script>
   </body>
   <script>

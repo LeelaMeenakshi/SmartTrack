@@ -160,5 +160,25 @@ h3{
     color: white;
 }
 section{
-    margin: 80px 0;
+    margin: 40px 0;
+}
+@media (max-width: 768px){
+    nav{
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+    .navlinks{
+    font-size:16px;
+    gap:15px;
+    }
+    .fco{
+        flex-direction: column;
+        gap: 20px;
+    }
+    .fc{
+        width: 100%;
+        box-sizing: border-box;
+    }
+
 }

@@ -71,6 +71,9 @@ button:hover{
     flex: 1;
     display: flex;
     flex-direction: column;
+
+    height: 100vh;
+    overflow: auto;
 }
 .topbar{
     display: flex;
@@ -124,6 +127,7 @@ button{
     margin-top: 20px;
     flex: 1;
 }
+.bandc{align-items:flex-start}
 .baskets,
 .trend{
     flex:1;
@@ -132,6 +136,10 @@ button{
     border-radius:12px;
     background-color: aliceblue;
     padding:20px;
+}
+.baskets, .trend{
+    max-height: calc(100vh - 240px);
+    overflow-y: auto;
 }
 .progress-bar {
   height: 8px;
@@ -259,4 +267,53 @@ transform:scale(1.1);
 }
 #save-semester button:hover{
     opacity: 1;
+}
+
+
+.logo{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+#menu-btn{
+    display: none;
+    font-size: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #2563EB;
+}
+@media (max-width: 768px){
+    #menu-btn{
+        display: block !important;
+        position: fixed;
+        left: 14px;
+        top: 14px;
+        z-index: 1300;
+        background: white;
+        border: 1px solid #2563EB;
+        border-radius: 10px;
+        padding: 8px 12px;
+        font-size: 28px;
+        color: #2563EB;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+    .sidebar{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 250px;
+        height: 100vh;
+        transform: translateX(-110%);
+        transition: transform 0.25s ease;
+        z-index: 1200;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.12);
+    }
+    .sidebar.open{
+        transform: translateX(0);
+    }
+    /* ensure main content sits under the sidebar overlay */
+    .main{
+        margin-left: 0;
+    }
 }
