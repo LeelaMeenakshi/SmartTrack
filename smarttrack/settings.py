@@ -27,6 +27,7 @@ import os
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = [
+    "web-production-fac08c.up.railway.app",
     "smarttrack-production.up.railway.app",
     "localhost",
     "127.0.0.1",
