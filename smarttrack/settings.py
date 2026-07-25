@@ -26,14 +26,20 @@ SECRET_KEY = 'django-insecure-2jvrpl@%&u7!e&p_)f14#93e()kgatc1lbkdd2)fm=tj=8h1$0
 import os
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
-ALLOWED_HOSTS = ["*"] 
+ALLOWED_HOSTS = [
+    "smarttrack-production.up.railway.app",
+    "localhost",
+    "127.0.0.1",
+]
 # ALLOWED_HOSTS = [
 #     "smarttrack-production.up.railway.app",
 #     "127.0.0.1",
 #     "localhost",
 # ]
 # thsi makes the app accessible from any host
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://smarttrack-production.up.railway.app",
+]
 
 # Application definition
 
