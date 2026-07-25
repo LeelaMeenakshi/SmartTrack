@@ -1,0 +1,117 @@
+.container{
+    display: flex;
+    flex-direction: row;
+}
+span{
+    color: #2563eb;
+}
+
+.navlinks a{
+    text-decoration: none;  
+    color: black; 
+    padding: 10px;
+    border-radius: 8px;
+}
+.navlinks a:hover{
+    background-color: #2563eb;
+    color: white;
+}
+.navlinks{
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    padding-top: 10px;
+    gap: 20px;
+}
+.sidebar{
+    width: 250px;
+    background-color: aliceblue;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px;
+}
+.logout{
+    margin-top: auto;
+    text-align: center;
+    padding-bottom: 15px;
+}
+.logout button{
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #2563eb;
+    color: white;
+    border-radius: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 180px;
+    padding: 15px;
+}
+.logout button:hover{
+    transform: scale(1.1);
+}
+.profile{
+    background-color: ghostwhite;
+    border:1px solid #ccc;
+    border-radius: 8px;
+    padding-left: 10px;
+}
+.topbar{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* align-items: center; */
+    background-color: aliceblue;
+    padding: 20px;
+    border-radius: 8px;
+}
+.main{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    height: 100vh;
+    overflow: hidden;
+}
+.history{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    margin-top: 20px;
+}
+details{
+    background-color: aliceblue;
+    border-radius: 10px;
+    padding: 15px;
+}
+summary{
+    list-style: none;
+    cursor: pointer;
+}
+.sembar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+table{
+    width: 100%;
+    table-layout: fixed;
+}
+th,
+td{
+    text-align: center;
+    padding: 15px;
+}
+thead{
+    background-color: #dce8f5;
+}
+.history{
+    overflow-y: auto;
+    overflow-x: auto;
+}
+.active{
+    background-color: #2563eb;
+    color: white !important;
+}

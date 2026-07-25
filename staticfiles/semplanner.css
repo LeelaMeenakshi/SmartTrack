@@ -1,0 +1,222 @@
+.container{
+    display: flex;
+    flex-direction: row;
+}
+span{
+    color: #2563eb;
+}
+
+.navlinks a{
+    text-decoration: none;  
+    color: black; 
+    padding: 10px;
+    border-radius: 8px;
+}
+.navlinks a:hover{
+    background-color: #2563eb;
+    color: white;
+}
+.navlinks{
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    padding-top: 10px;
+    gap: 20px;
+}
+.sidebar{
+    width: 250px;
+    background-color: aliceblue;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px;
+}
+.logout{
+    margin-top: auto;
+    text-align: center;
+    padding-bottom: 15px;
+}
+.logout button{
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #2563eb;
+    color: white;
+    border-radius: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 180px;
+    padding: 15px;
+}
+.logout button:hover{
+    transform: scale(1.1);
+}
+.profile{
+    background-color: ghostwhite;
+    border:1px solid #ccc;
+    border-radius: 8px;
+    padding-left: 10px;
+}
+.topbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: aliceblue;
+    padding: 20px;
+    border-radius: 8px;
+}
+.main{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    height: 100vh;
+    overflow: hidden;
+
+}
+select{
+    background-color: white;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    border-radius: 4px;
+    border: 1px solid #2563eb;
+    width: 300px;
+    padding: 10px;
+}
+.creditstatus{
+    display:flex;
+    gap:20px;
+
+    margin-top:20px;
+}
+.creditsplan,
+.creditload,
+.total{
+    background-color: aliceblue;
+    padding:10px;
+    border-radius:8px;
+    flex:1;
+
+}
+.active{
+    background-color: #2563eb;
+    color: white !important;   
+}
+.below{
+    color: #2563eb;
+}
+.courses{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.addcourse{
+    background-color: aliceblue;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+.courseslist{
+    flex: 1;
+    background-color: aliceblue;
+    border-radius: 8px;
+    font-size: 20px;
+    margin-top: 20px;
+    padding: 10px;
+    height: 280px;
+    overflow-y: auto;
+}
+.but button{
+    background-color: #2563eb;
+    font-family: 'Times New Roman', Times, serif;
+    color: white;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.but button:hover{
+    transform: scale(1.05);
+}
+.tablewrapper{
+    overflow-x:auto;
+}
+table{
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+
+}
+th,
+td{
+    padding: 15px;
+    text-align: left;
+}
+thead{
+    background-color: #dceaf8;
+    border-radius: 4px;
+}
+tbody tr{
+    border-bottom: 1px solid #ddd;
+}
+.basketcard{
+    padding: 20px;
+    background: aliceblue;
+    border-radius: 10px;
+}
+.progress{
+    position: relative;
+    height: 12px;
+    width: 100%;
+    background-color: #ccc;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.completed{
+    position: absolute;
+    height: 100%;
+    left: 0;
+    right: 0;       /* 10/20 */
+    background:#2563eb;
+}
+
+.planned{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: #7cb4ff;
+}
+.basket{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+}
+#planner-search-results{
+    position:absolute;
+    width:240px;
+    background:white;
+    border:1px solid #ccc;
+    max-height:180px;
+    overflow-y:auto;
+    z-index:1000;
+}
+
+.search-result{
+    padding:8px;
+    cursor:pointer;
+}
+
+.search-result:hover{
+    background:#dce8ff;
+}
+.secpart{
+    position:relative;
+}

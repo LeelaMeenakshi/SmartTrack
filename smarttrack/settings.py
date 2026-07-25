@@ -38,8 +38,9 @@ ALLOWED_HOSTS = [
 # ]
 # thsi makes the app accessible from any host
 CSRF_TRUSTED_ORIGINS = [
-    "https://smarttrack-production.up.railway.app",
+    "https://web-production-fac08c.up.railway.app",
 ]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Application definition
 
