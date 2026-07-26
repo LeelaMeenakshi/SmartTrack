@@ -207,7 +207,6 @@
             searchInput.dataset.code = course.code;
             searchInput.dataset.credits = course.credits;
             resultsBox.innerHTML = "";
-            console.log(course);
           };
           resultsBox.appendChild(div);
         });
@@ -244,9 +243,7 @@
           }),
         })
           .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-          });
+          .then((data) => {});
       });
 
       function getCookie(name) {
@@ -284,7 +281,6 @@
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log(data);
               if (data.success) {
                 location.reload();
               }

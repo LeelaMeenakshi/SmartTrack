@@ -140,11 +140,11 @@ def planner_view(request):
     elif planned_credits >28:
         load_status = "Exceeds default maximum load"
     available_courses= CourseCatalog.objects.exclude(id__in=completed_ids).exclude(id__in=planned_ids)
-    print("Completed:", list(completed_ids))
-    print("Planned:", list(planned_ids))
-    print("Available:", available_courses.count())
+    # print("Completed:", list(completed_ids))
+    # print("Planned:", list(planned_ids))
+    # print("Available:", available_courses.count())
     progress = calculate_progress(student)
-    print(progress)
+    # print(progress)
     return render(request,'semplanner.html',{
         "student": student,
         "available_semesters":available_semesters,
@@ -348,7 +348,7 @@ def dashboard_view(request):
         student = student
     )
     catalog_courses = CourseCatalog.objects.all()[:10]
-    print(catalog_courses)
+    
 
     credit_summary = calculate_credit_summary(student)
     history, available_semesters = calculate_history(student)
@@ -477,7 +477,7 @@ def update_requirements(request):
         )
 
         student.save()
-        print(request.POST)
+        
 
     return redirect("dashboard")
 # Create your views here.

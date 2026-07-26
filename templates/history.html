@@ -48,7 +48,7 @@
         <div class="history">
           <details data-sem="1">
             {% comment %} this is a built in html element allows to click and
-            then expand {% endcomment %} without involving js
+            then expand {% endcomment %}
             <summary>
               {% comment %} things to be visible without clicking are the
               details in summary {% endcomment %}
@@ -317,12 +317,11 @@
         fetch("/history-data/")
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
             let semesters = document.querySelectorAll("details");
             semesters.forEach((semester) => {
               let sem = semester.dataset.sem;
               let semesterData = data[sem];
-              console.log(sem, semesterData);
+
               let tbody = semester.querySelector("tbody");
               tbody.innerHTML = "";
 

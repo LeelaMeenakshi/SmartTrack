@@ -183,10 +183,10 @@
                 showChosenSemester(sel);
               }
             }
-        console.log(selectedCourses);
+
       }
       function displayCourse(course){
-        console.log("displaying,course.course_code");
+
         let selectedBox = document.getElementById("selected-courses");
         let selectedItem = document.createElement("div");
         selectedItem.className= "sel-course";
@@ -225,9 +225,7 @@
         let removeBtn = document.createElement("button");
         removeBtn.onclick= async function(){
           let csrftoken = getCookie("csrftoken");
-          console.log("remove clicked");
-          console.log(course);
-          console.log(selectedSemester);
+
           const resp = await fetch("/remove-course/",{
             method:"POST",
             headers:{
@@ -241,7 +239,7 @@
             });
           try{
             const result = await resp.json();
-            console.log(result);
+
           }catch(e){
             console.warn('remove-course returned no json', e);
           }
@@ -308,7 +306,7 @@
                 btn.className = "add-course-btn";
                 btn.innerText= '+';
                 btn.onclick= function(){
-                  console.log(course);
+
                   //let selectedBox = document.getElementById("selected-courses");
                   if (!selectedSemester) {
                     alert("Please select a semester first.");
@@ -340,7 +338,7 @@
               });
             });
         } else {
-          console.log("HIDING");
+
           t.style.display = "none";
         }
       }
@@ -353,18 +351,12 @@
         document.getElementById("course-search").style.display = "block";
         let selectedBox = document.getElementById("selected-courses");
         selectedBox.innerHTML = "";
-        console.log("Selected Semester:", selectedSemester);
-        console.log("Selected Courses:", selectedCourses);
-        console.log(
-          "Current Semester Data:",
-          selectedCourses[selectedSemester],
-        );
+
         selectedCourses[selectedSemester].forEach((course) => {
           displayCourse(course);
         });
 
         //document.getElementById("selected-courses").style.display = "block";
-        console.log("Stored:", selectedSemester);
       }
     </script>
     <script>
@@ -405,24 +397,20 @@
         });
         try {
           const result = await resp.json();
-          console.log(result);
         } catch (e) {
           console.warn("save-semester returned no json", e);
         }
         // refresh local data and basket analysis to reflect saved changes
         loadSemester();
         loadBasketAnalysis();
-        console.log(data);
       }
       function loadSemester() {
         fetch("/get-semesters/")
           .then((response) => response.json())
           .then((data) => {
-            console.log("response from backend", data);
             for (let semester in data.semesters) {
               selectedCourses[semester] = data.semesters[semester];
             }
-            console.log("selected courses after loading", selectedCourses);
           });
       }
       loadSemester();
@@ -504,7 +492,6 @@
               card.append(progressBar);
               container.append(card);
             }
-            console.log(data);
           });
       }
       loadBasketAnalysis();
