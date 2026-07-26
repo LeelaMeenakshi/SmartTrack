@@ -60,6 +60,7 @@ python manage.py runserver
 
 -> Live URL: https://web-production-fac08c.up.railway.app/
 -> GitHub Repository: https://github.com/LeelaMeenakshi/SmartTrack.git
+-> Demo link: https://canva.link/7g1xrt17r6j2ioe
 
 ## How to use
 

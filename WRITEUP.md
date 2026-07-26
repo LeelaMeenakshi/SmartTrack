@@ -52,3 +52,5 @@ Moving from local development to production deployment introduced problems with 
 4. Design and structure this App for students of academic years before 2025-26.
 5. Make the Authentication stronger.
 6. Making the UI more professional.
+
+Demo link: https://canva.link/7g1xrt17r6j2ioe
