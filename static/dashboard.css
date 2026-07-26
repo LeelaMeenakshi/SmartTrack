@@ -81,10 +81,21 @@ button:hover{
     border-radius: 8px;
     border-bottom: #2563EB;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     border: 1px solid #E2E8F0;
     padding: 20px;
+    gap: 20px;
 
+}
+.welcome{
+    flex:1;
+}
+.extra-requirements{
+    width:260px;
+    min-width:260px;
+    background:white;
+    padding:12px;
+    border-radius:10px;
 }
 button{
     font-family: 'Times New Roman', Times, serif;
@@ -206,6 +217,8 @@ transform:scale(1.1);
 }
 .semester-add{
     width: 320px;
+    min-width:320px;
+    flex-shrink:0;
 }
 .course-item{
     display: flex;
@@ -214,6 +227,10 @@ transform:scale(1.1);
     align-items: center;
     padding: 8px 12px;
     gap: 10px;
+}
+.course-item span{
+    flex:1;
+    word-break:break-word;
 }
 .add-course-btn{
     width: 15px !important;
@@ -283,37 +300,4 @@ transform:scale(1.1);
     cursor: pointer;
     color: #2563EB;
 }
-@media (max-width: 768px){
-    #menu-btn{
-        display: block !important;
-        position: fixed;
-        left: 14px;
-        top: 14px;
-        z-index: 1300;
-        background: white;
-        border: 1px solid #2563EB;
-        border-radius: 10px;
-        padding: 8px 12px;
-        font-size: 28px;
-        color: #2563EB;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-    }
-    .sidebar{
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 250px;
-        height: 100vh;
-        transform: translateX(-110%);
-        transition: transform 0.25s ease;
-        z-index: 1200;
-        box-shadow: 2px 0 8px rgba(0,0,0,0.12);
-    }
-    .sidebar.open{
-        transform: translateX(0);
-    }
-    /* ensure main content sits under the sidebar overlay */
-    .main{
-        margin-left: 0;
-    }
-}
+

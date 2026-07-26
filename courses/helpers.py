@@ -1,6 +1,38 @@
 from .models import CompletedCourse, SemesterPlan
 
 from .basket_config import COMMON_BASKETS, BRANCH_BASKETS
+
+
+def calculate_credit_summary(student):
+    completed_courses = CompletedCourse.objects.filter(student=student)
+    completed_credits = sum(course.course.credits for course in completed_courses)
+
+    if student.foundation_program:
+        completed_credits += 4
+    if student.ge_course_1:
+        completed_credits += 2
+    if student.ge_course_2:
+        completed_credits += 2
+
+    branch = student.discipline
+    all_baskets = {}
+    all_baskets.update(COMMON_BASKETS)
+    all_baskets.update(BRANCH_BASKETS[branch])
+
+    if branch == "CE":
+        required_credits = 171
+    else:
+        required_credits = 173
+
+    remaining_credits = max(required_credits - completed_credits, 0)
+
+    return {
+        "completed_credits": completed_credits,
+        "required_credits": required_credits,
+        "remaining_credits": remaining_credits,
+    }
+
+
 def calculate_progress(student):
     completed_courses = CompletedCourse.objects.filter(student=student)
     branch= student.discipline
@@ -70,6 +102,24 @@ def calculate_progress(student):
 
         # print(calculate_progress(student))
 
+    if student.ge_course_1:
+        progress["HSS Basket"]["completed"] += 2
+        progress["HSS Basket"]["course_list"].append({
+            "code": "GE I",
+            "name": "GE I",
+            "credits": 2,
+            "grade": None,
+        })
+
+    if student.ge_course_2:
+        progress["HSS Basket"]["completed"] += 2
+        progress["HSS Basket"]["course_list"].append({
+            "code": "GE II",
+            "name": "GE II",
+            "credits": 2,
+            "grade": None,
+        })
+
     return progress
 
 def calculate_history(student):
@@ -99,7 +149,11 @@ def calculate_history(student):
 
     available_semesters = []
     for sem in history:
-        if history[sem]["credits"]==0:
+        if history[sem]["credits"] == 0:
             available_semesters.append(sem)
+        else:
+            history[sem]["spi"] = round(
+                history[sem]["grade_points"] / history[sem]["credits"], 2
+            )
 
     return history, available_semesters

@@ -12,7 +12,7 @@ from collections import defaultdict
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from .helpers import calculate_history, calculate_progress
+from .helpers import calculate_history, calculate_progress, calculate_credit_summary
 from django.views.decorators.http import require_POST
 import json
 def signup_view(request):
@@ -158,7 +158,11 @@ def planner_view(request):
     })
 @login_required
 def reports(request):
-    return render(request,'history.html')
+    student = Student.objects.get(email=request.user.email)
+    return render(request,'history.html', {
+        'user': request.user,
+        'student': student,
+    })
 
 @login_required
 def search_course(request):
@@ -346,6 +350,11 @@ def dashboard_view(request):
     catalog_courses = CourseCatalog.objects.all()[:10]
     print(catalog_courses)
 
+    credit_summary = calculate_credit_summary(student)
+    history, available_semesters = calculate_history(student)
+    semester_spis = [history[sem]["spi"] for sem in history if history[sem]["credits"] > 0]
+    cpi = round(sum(semester_spis) / len(semester_spis), 2) if semester_spis else 0
+
     return render(
         request,
         'dashboard.html',
@@ -354,7 +363,17 @@ def dashboard_view(request):
             'student': student,
             'courses': courses,
             'catalog_courses': catalog_courses,
-            "baskets": list(all_baskets.keys())
+            "baskets": list(all_baskets.keys()),
+            "credit_summary": credit_summary,
+            "completed_credits": credit_summary["completed_credits"],
+            "required_credits": credit_summary["required_credits"],
+            "remaining_credits": credit_summary["remaining_credits"],
+            "cpi": cpi,
+            "graduation_percentage": round(
+                (credit_summary["completed_credits"] * 100 / credit_summary["required_credits"])
+                if credit_summary["required_credits"] else 0,
+                2,
+            ),
         }
     )
 
@@ -363,14 +382,7 @@ def dashboard_view(request):
 def history_data(request):
     student = Student.objects.get(email=request.user.email)
     completed_courses = CompletedCourse.objects.filter(student= student)
-    history,available_semesters = calculate_history(student)
-
-    
-    for sem in history:
-        if history[sem]["credits"]>0:
-            history[sem]["spi"]= round(
-                history[sem]["grade_points"] /history[sem]["credits"],2
-            )
+    history, available_semesters = calculate_history(student)
 
     return JsonResponse(history)
 
@@ -446,4 +458,26 @@ def remove_planned_course(request):
     ).delete()
 
     return JsonResponse({"success": True})
+
+@login_required
+def update_requirements(request):
+    student = Student.objects.get(email=request.user.email)
+
+    if request.method == "POST":
+        student.foundation_program = (
+            "foundation_program" in request.POST
+        )
+
+        student.ge_course_1 = (
+            "ge_course_1" in request.POST
+        )
+
+        student.ge_course_2 = (
+            "ge_course_2" in request.POST
+        )
+
+        student.save()
+        print(request.POST)
+
+    return redirect("dashboard")
 # Create your views here.

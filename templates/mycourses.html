@@ -17,14 +17,14 @@
         <!--logo-->
 
         <div class="profile">
-          <h2>Name</h2>
-          <h3>Discipline</h3>
+          <h2>{{ user.first_name }}</h2>
+          <h3>{{ student.discipline }}</h3>
         </div>
         <!--profile-->
 
         <div class="navlinks">
           <a href="/dashboard/">Dashboard</a>
-          <a href="/courses/" class="active">My courses</a>
+          <a href="/courses/" class="active">User Guide</a>
           <a href="/basket/">Basket Analysis</a>
           <a href="/planner/">Semester Planner</a>
           <a href="/reports/">Reports</a>
@@ -43,120 +43,387 @@
       <div class="main">
         <div class="topbar">
           <div class="text">
-            <h1>My Courses</h1>
-            <h2>All your completed courses</h2>
-          </div>
-          <div class="acbutton">
-            <button>+Add Course</button>
+            <h1>User Guide</h1>
+            <h2>Understand how Smart Track works before using</h2>
           </div>
         </div>
         <!--topbar-->
 
-        <div class="filters">
-          <select>
-            <option>All Semesters</option>
-            <option>Semester 1</option>
-            <option>Semester 2</option>
-            <option>Semester 3</option>
-            <option>Semester 4</option>
-            <option>Semester 5</option>
-            <option>Semester 6</option>
-            <option>Semester 7</option>
-            <option>Semester 8</option>
-          </select>
+        <!-- user guide content-->
+        <div class="guide-content">
+          <section class="guide-section">
+            <h2>1. Introduction</h2>
+            <p>
+              SmartTrack is a web application developed to help B.Tech students
+              of IIT Gandhinagar manage their academic journey. It allows
+              students to record completed courses, monitor graduation
+              requirements, analyze basket-wise credit progress, and plan future
+              semesters through an interactive dashboard.
+            </p>
+            <p class="note">
+              <strong>Important:</strong> SmartTrack is structured according to
+              the official curriculum advisory from the
+              <strong>B.Tech 2025-26 batch</strong> only. Students from earlier
+              batches have different credit and basket requirements.
+            </p>
+            <p class="note">
+              <strong>Note:</strong> SmartTrack is designed based on IIT
+              Gandhinagar's undergraduate curriculum structure. While the
+              application closely follows the institute advisory, students
+              should always verify important academic decisions using the latest
+              official institute documents.
+            </p>
+          </section>
 
-          <select>
-            <option>All Baskets</option>
-            <option>Science Basket</option>
-            <option>Maths Baskets</option>
-            <option>Humanities Baskets</option>
-            <option>Mandatory Baskets</option>
-          </select>
-        </div>
-        <!--fillers-->
+          <section class="guide-section">
+            <h2>2. Understanding IITGN Graduation Requirements</h2>
+            <p>
+              Before using SmartTrack, it is useful to understand the basic
+              curriculum structure followed by IIT Gandhinagar.
+            </p>
 
-        <div class="tablecard">
-          <div class="tablewrapper">
-            <table>
+            <h3>Credit Requirements</h3>
+            <table class="guide-table">
               <thead>
                 <tr>
-                  <th>Course Name</th>
-                  <th>Code</th>
+                  <th>Requirement</th>
                   <th>Credits</th>
-                  <th>Grade</th>
-                  <th>Semester</th>
-                  <th>Basket</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Maths</td>
-                  <td>MA101</td>
-                  <td>4</td>
-                  <td>A</td>
-                  <td>Sem 1</td>
-                  <td>Maths</td>
-                  <td class="actions">
-                    <button class="editbtn">Edit</button>
-                    <button class="deletebtn">Delete</button>
-                  </td>
+                  <td>Institute Mandatory Courses</td>
+                  <td>32</td>
                 </tr>
                 <tr>
-                  <td>Physics</td>
-                  <td>MA101</td>
+                  <td>Foundation Programme (FP)</td>
                   <td>4</td>
-                  <td>A</td>
-                  <td>Sem 1</td>
-                  <td>Maths</td>
-                  <td class="actions">
-                    <button class="editbtn">Edit</button>
-                    <button class="deletebtn">Delete</button>
-                  </td>
                 </tr>
                 <tr>
-                  <td>Maths</td>
-                  <td>MA101</td>
-                  <td>4</td>
-                  <td>A</td>
-                  <td>Sem 1</td>
-                  <td>Maths</td>
-                  <td class="actions">
-                    <button class="editbtn">Edit</button>
-                    <button class="deletebtn">Delete</button>
-                  </td>
+                  <td>Mathematics Basket</td>
+                  <td>10</td>
                 </tr>
                 <tr>
-                  <td>Maths</td>
-                  <td>MA101</td>
-                  <td>4</td>
-                  <td>A</td>
-                  <td>Sem 1</td>
-                  <td>Maths</td>
-                  <td class="actions">
-                    <button class="editbtn">Edit</button>
-                    <button class="deletebtn">Delete</button>
-                  </td>
+                  <td>Science Basket</td>
+                  <td>8</td>
                 </tr>
                 <tr>
-                  <td>Maths</td>
-                  <td>MA101</td>
+                  <td>MSE Basket</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td>Basic Science Electives</td>
                   <td>4</td>
-                  <td>A</td>
-                  <td>Sem 1</td>
-                  <td>Maths</td>
-                  <td class="actions">
-                    <button class="editbtn">Edit</button>
-                    <button class="deletebtn">Delete</button>
-                  </td>
+                </tr>
+                <tr>
+                  <td>HSS Basket</td>
+                  <td>20</td>
+                </tr>
+                <tr>
+                  <td>Open Electives</td>
+                  <td>20</td>
+                </tr>
+                <tr>
+                  <td>Open Project</td>
+                  <td>4</td>
                 </tr>
               </tbody>
             </table>
-          </div>
+            <p>
+              The remaining credits are obtained through discipline-specific
+              core and elective courses.
+            </p>
+
+            <h3>Institute Mandatory Courses</h3>
+            <ul>
+              <li>
+                ES 101 - Engineering Graphics (3cr), ES 112 - Computing (3cr),ES
+                114 - Probability, Statistics & Data Visualization (3cr), ES 115
+                - Design, Innovation and Prototyping (5cr), ES 116 - Principles
+                and Applications of Electrical Engineering (5cr), ES 117 - The
+                World of Engineering (2cr), ES 119 - Principles of Artificial
+                Intelligence (4cr), ES 243 - Biology for Engineers (4cr), BS 192
+                - Undergraduate Science Laboratory (3cr)
+              </li>
+              {% comment %}
+              <li>
+                <strong></strong>
+              </li>
+              {% endcomment %}
+            </ul>
+            <h3>Humanities and Social Sciences (HSS)</h3>
+            <ul>
+              <li>
+                Three HSS courses are mandatory.[HS 191: Introduction to Writing
+                I (2 credits), HS 192: Introduction to Writing II (2 credits)
+                and HS 151: Economics (4 credits)]
+              </li>
+              <li>
+                <strong
+                  >4 credits must come from General Education (GE)
+                  courses.</strong
+                >
+              </li>
+              <li>
+                The remaining credits may be completed through HSS or Management
+                electives.
+              </li>
+            </ul>
+            <p>
+              In SmartTrack, GE courses are treated as a sub-category of the HSS
+              basket. Once completed, their credits are automatically counted
+              towards HSS progress.
+            </p>
+
+            <h3>Mathematics Basket</h3>
+            <ul>
+              <li>Total requirement: <strong>10 credits</strong></li>
+              <li>
+                Three Mathematics courses are compulsory [MA 103: Calculus of
+                Single Variable and Linear Algebra (4 credits), MA 104: Ordinary
+                Differential Equations (2 credits), MA 203: Numerical Methods (2
+                credits)]
+              </li>
+              <li>
+                Remaining credits may be earned from any Mathematics basket
+                course.
+              </li>
+            </ul>
+
+            <h3>Science Basket</h3>
+            <ul>
+              <li>Total requirement: <strong>8 credits</strong></li>
+              <li>
+                Depending on the student's discipline, one Science course may be
+                compulsory.
+              </li>
+            </ul>
+
+            <h3>Basic Science Electives</h3>
+            <ul>
+              <li>Requirement: <strong>4 credits</strong></li>
+              <li>
+                Every Science basket course is also considered a Basic Science
+                Elective, but not every Basic Science Elective belongs to the
+                Science basket.
+              </li>
+            </ul>
+
+            <h3>Open Electives</h3>
+            <ul>
+              <li>Requirement: <strong>20 credits</strong></li>
+              <li>
+                These may be selected from any discipline offered by IITGN.
+              </li>
+            </ul>
+            <p class="note">
+              <strong>Important:</strong> A course contributes to only one
+              basket at a time in general.
+            </p>
+
+            <h3>Discipline Courses</h3>
+            <p>Every discipline contains:</p>
+            <ul>
+              <li><strong>Core Courses</strong> (fixed and compulsory)</li>
+              <li><strong>Discipline Electives</strong></li>
+            </ul>
+            <p>
+              Many discipline electives also contain
+              <strong>sub-baskets</strong>.
+            </p>
+            <p>For example:</p>
+            <ul>
+              <li>
+                Artificial Intelligence contains a
+                <strong>CSE</strong> sub-basket.
+              </li>
+              <li>Civil Engineering contains multiple elective groups.</li>
+            </ul>
+            <p>
+              Credits earned in a sub-basket are automatically counted towards
+              its parent basket.
+            </p>
+
+            <h3>Pass / Fail Courses</h3>
+            <table class="guide-table">
+              <thead>
+                <tr>
+                  <th>Course</th>
+                  <th>Credits</th>
+                  <th>Counts Towards Credits</th>
+                  <th>Counts in SPI/CPI</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Foundation Programme</td>
+                  <td>4</td>
+                  <td>✓</td>
+                  <td>✗</td>
+                </tr>
+                <tr>
+                  <td>GE I</td>
+                  <td>2</td>
+                  <td>✓</td>
+                  <td>✗</td>
+                </tr>
+                <tr>
+                  <td>GE II</td>
+                  <td>2</td>
+                  <td>✓</td>
+                  <td>✗</td>
+                </tr>
+                <tr>
+                  <td>PE 101–104</td>
+                  <td>0</td>
+                  <td>✗</td>
+                  <td>✗</td>
+                </tr>
+                <tr>
+                  <td>Mandatory Viva Voce</td>
+                  <td>0</td>
+                  <td>✗</td>
+                  <td>✗</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>
+              These courses contribute to graduation requirements where
+              applicable but do not affect SPI.
+            </p>
+          </section>
+
+          <section class="guide-section">
+            <h2>3. Getting Started</h2>
+            <ol>
+              <li>Create an account.</li>
+              <li>Log in using your registered credentials.</li>
+              <li>Start adding your completed courses semester-wise.</li>
+            </ol>
+          </section>
+
+          <section class="guide-section">
+            <h2>4. Dashboard</h2>
+            <p>The Dashboard provides an overview of your academic progress.</p>
+
+            <h3>Available Information</h3>
+            <ul>
+              <li>Total completed credits</li>
+              <li>Remaining credits</li>
+              <li>Graduation progress</li>
+              <li>Basket overview</li>
+              <li>Semester SPI trend</li>
+            </ul>
+
+            <h3>Special Requirements</h3>
+            <p>
+              Foundation Programme and General Education courses can be marked
+              separately. Their credits are automatically reflected in the
+              overall graduation progress.
+            </p>
+          </section>
+
+          <section class="guide-section">
+            <h2>5. Basket Analysis</h2>
+            <p>
+              The Basket Analysis page provides detailed progress for every
+              graduation basket.
+            </p>
+            <p>For each basket you can view:</p>
+            <ul>
+              <li>Required credits</li>
+              <li>Completed credits</li>
+              <li>Remaining credits</li>
+              <li>Progress percentage</li>
+              <li>Courses completed under that basket</li>
+            </ul>
+
+            <h3>Basket Selection</h3>
+            <p>
+              SmartTrack does <strong>not automatically decide</strong> which
+              basket a course belongs to.
+            </p>
+            <p>
+              Some IITGN courses may satisfy different baskets depending on a
+              student's curriculum. Therefore, the student is responsible for
+              selecting the appropriate basket while adding a course.
+            </p>
+            <p class="note">
+              Selecting an incorrect basket may result in inaccurate progress
+              statistics.
+            </p>
+          </section>
+
+          <section class="guide-section">
+            <h2>6. Semester Planner</h2>
+            <p>
+              The Semester Planner helps students organize future semesters.
+            </p>
+            <p>Features:</p>
+            <ul>
+              <li>Add courses for upcoming semesters.</li>
+              <li>Prevent duplicate course selection.</li>
+              <li>Display projected basket completion.</li>
+              <li>
+                Visualize how future courses contribute toward graduation
+                requirements.
+              </li>
+            </ul>
+          </section>
+
+          <section class="guide-section">
+            <h2>7. Reports</h2>
+            <p>
+              The Reports page provides a semester-wise summary of academic
+              performance.
+            </p>
+            <p>It includes:</p>
+            <ul>
+              <li>Course history</li>
+              <li>Semester-wise records</li>
+              {% comment %}
+              <li>Academic statistics</li>
+              {% endcomment %} {% comment %}
+              <li>
+                (If enabled) Export academic history as an Excel (.xlsx) file
+              </li>
+              {% endcomment %}
+            </ul>
+          </section>
+
+          <section class="guide-section">
+            <h2>8. Tips for Accurate Tracking</h2>
+            <ul>
+              <li>Always assign courses to the correct basket.</li>
+              <li>Avoid adding the same course multiple times.</li>
+              <li>
+                Use the Semester Planner only for courses not yet completed.
+              </li>
+              <li>
+                Review Basket Analysis regularly to monitor graduation progress.
+              </li>
+              <li>Remember that Pass/Fail courses do not affect SPI/CPI.</li>
+            </ul>
+          </section>
+
+          <section class="guide-section">
+            <h2>9. Conclusion</h2>
+            <p>
+              SmartTrack brings graduation requirements, basket tracking,
+              semester planning, and academic history into a single platform. By
+              carefully maintaining course records and selecting the appropriate
+              baskets, students can monitor their academic progress throughout
+              their undergraduate program with significantly less manual effort.
+            </p>
+            <p>
+              Although SmartTrack simplifies academic planning, students should
+              always refer to the latest IIT Gandhinagar advisory for official
+              academic regulations.
+            </p>
+          </section>
         </div>
-        <!--tablecard-->
-        <!-- <div class="editoptions">
-            <button></button>
-        </div> editoptions -->
+        <!--guide-content-->
+        <!-- user guide content= -->
       </div>
       <!--main-->
     </div>

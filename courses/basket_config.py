@@ -8,20 +8,19 @@ COMMON_BASKETS = {
     "MSE Basket": 3,
     "Basic Science Electives": 4,
     "Open Electives": 20,
-    "PE Courses": 0,          
     "Open Project Course": 4,
 }
 
 BRANCH_BASKETS = {
     "CSE": {
         "CSE Core": 36,
-        "CSE Discipline Electives": 30,
+        "CSE Discipline Electives": 32,
         "Theory and Algorithms Basket": 8,
         "Systems Basket": 8,
     },
 
     "EE": {
-        "EE Core": 43,
+        "EE Core": 44,
         "EE Discipline Electives": 24,
     },
 
@@ -49,12 +48,12 @@ BRANCH_BASKETS = {
     },
 
     "MSE": {
-        "MSE Core": 42,
+        "MSE Core": 44,
         "MSE Discipline Electives": 24,
     },
 
     "ChE": {
-        "ChE Core": 42,
+        "ChE Core": 44,
         "ChE Discipline Electives": 24,
     },
 }

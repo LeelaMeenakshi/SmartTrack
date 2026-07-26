@@ -20,13 +20,13 @@
 
         <div class="profile">
           <h2>{{ user.first_name }}</h2>
-          <h3>Discipline</h3>
+          <h3>{{ student.discipline }}</h3>
         </div>
         <!--profile-->
 
         <div class="navlinks">
           <a href="/dashboard/" class="active">Dashboard</a>
-          <a href="/courses/">My courses</a>
+          <a href="/courses/">User Guide</a>
           <a href="/basket/">Basket Analysis</a>
           <a href="/planner/">Semester Planner</a>
           <a href="/reports/">Reports</a>
@@ -41,13 +41,48 @@
       <!--sidebar-->
       <div class="main">
         <div class="topbar">
-          <button id="menu-btn" aria-expanded="false" aria-label="Open sidebar">
-            ☰
-          </button>
           <div class="welcome">
             <h1>Welcome back, {{ user.first_name }}!</h1>
             <h2>Here is your academic overview</h2>
           </div>
+          <form method="POST" action="{% url 'update_requirements' %}">
+            {% csrf_token %}
+            <div class="extra-requirements">
+              <h4>Other Mandatory Requirements</h4>
+              <label>
+                <!-- prettier-ignore -->
+                <input
+                  type="checkbox"
+                  id="fp"
+                  name="foundation_program"
+                  {% if student.foundation_program %}checked{% endif %}
+                />
+                FP100 Foundation Programme (+4)
+              </label>
+              <label>
+                <!-- prettier-ignore -->
+                <input
+                  type="checkbox"
+                  id="ge1"
+                  name="ge_course_1"
+                  {% if student.ge_course_1 %}checked{% endif %}
+                />
+                GE I (+2)
+              </label>
+              <label>
+                <!-- prettier-ignore -->
+                <input
+                  type="checkbox"
+                  id="ge2"
+                  name="ge_course_2"
+                  {% if student.ge_course_2 %}checked{% endif %}
+                />
+                GE II (+2)
+              </label>
+
+              <button type="submit">Save</button>
+            </div>
+          </form>
           <div class="semester-add">
             <button onclick="showSemester()">+ Add Semester</button>
             <div id="semester-box" style="display: none; margin-top: 10px">
@@ -89,28 +124,26 @@
 
         <div class="progcard">
           <div class="card">
-            <h2>CGPA</h2>
-            <h1>8.45</h1>
-            <h2>Good standing</h2>
+            <h2>CPI</h2>
+            <h1>{{ cpi }}</h1>
           </div>
 
           <div class="card">
             <h2>Credits done</h2>
-            <h1>96</h1>
-            <h2>On track</h2>
+            <h1>{{ completed_credits }}/{{ required_credits }}</h1>
           </div>
           <div class="card">
             <h2>Credits left</h2>
-            <h1>64</h1>
+            <h1>{{ remaining_credits }}</h1>
             <h2>To graduate</h2>
           </div>
           <div class="card">
             <h2>Graduation</h2>
-            <h1>60 %</h1>
+            <h1>{{ completed_credits }} / {{ required_credits }}</h1>
             <div class="progress-bar">
               <div
                 class="progress-fill"
-                style="width: 60%; background: #2563eb"
+                style="width: {{ graduation_percentage }}%; background: #2563eb"
               ></div>
             </div>
           </div>
@@ -395,6 +428,51 @@
       loadSemester();
     </script>
     <script>
+      function updateRequirement(field, value, checkbox) {
+        fetch("/update-requirement/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+          },
+          body: JSON.stringify({ field: field, value: value }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              if (checkbox) {
+                checkbox.checked = data.checked;
+              }
+
+              const completedEl = document.querySelector(
+                ".progcard .card:nth-child(2) h1",
+              );
+              const remainingEl = document.querySelector(
+                ".progcard .card:nth-child(3) h1",
+              );
+              const graduationTextEl = document.querySelector(
+                ".progcard .card:nth-child(4) h1",
+              );
+              const graduationBarEl = document.querySelector(
+                ".progcard .card:nth-child(4) .progress-fill",
+              );
+
+              if (completedEl) {
+                completedEl.textContent = `${data.completed_credits}/${data.required_credits}`;
+              }
+              if (remainingEl) {
+                remainingEl.textContent = data.remaining_credits;
+              }
+              if (graduationTextEl) {
+                graduationTextEl.textContent = `${data.graduation_percentage}%`;
+              }
+              if (graduationBarEl) {
+                graduationBarEl.style.width = `${data.graduation_percentage}%`;
+              }
+            }
+          })
+          .catch((err) => console.error("Failed to update requirement", err));
+      }
       function loadBasketAnalysis() {
         fetch("/basket-analysis/")
           .then((response) => response.json())
@@ -432,7 +510,7 @@
       loadBasketAnalysis();
     </script>
     <script>
-      const menuBtn = document.getElementById("menu-btn");
+      {% comment %} const menuBtn = document.getElementById("menu-btn");
       const sidebar = document.querySelector(".sidebar");
       // Toggle `open` on the sidebar for small screens. `active` is used
       // elsewhere for nav link highlighting, so use a dedicated class.
@@ -456,30 +534,52 @@
           sidebar.classList.remove("open");
           menuBtn.setAttribute("aria-expanded", "false");
         }
-      });
+      }); {% endcomment %}
     </script>
   </body>
   <script>
-    const ctx = document.getElementById("gpaChart").getContext("2d");
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: ["Sem 1", "Sem 2", "Sem 3", "Sem 4"],
-        datasets: [
-          {
-            label: "GPA",
-            data: [8.2, 8.65, 8.4, 8.5],
-            backgroundColor: "#2563eb",
-            borderRadius: 4,
+    // Load semester SPI data from backend and render Chart.js chart
+    fetch("/history-data/")
+      .then((res) => res.json())
+      .then((history) => {
+        const labels = [];
+        const data = [];
+
+        // history keys are integers 1..8 (or strings) with credits/spi
+        for (let i = 1; i <= 8; i++) {
+          const sem = history[i] || history[String(i)];
+          if (sem && sem.credits > 0) {
+            labels.push("Sem " + i);
+            data.push(sem.spi || 0);
+          }
+        }
+
+        const ctx = document.getElementById("gpaChart").getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "SPI",
+                data: data,
+                backgroundColor: "#2563eb",
+                borderRadius: 4,
+              },
+            ],
           },
-        ],
-      },
-      options: {
-        scales: {
-          y: { min: 7, max: 10 },
-        },
-        plugins: { legend: { display: false } },
-      },
-    });
+          options: {
+            scales: {
+              y: { beginAtZero: true, suggestedMin: 0, suggestedMax: 10 },
+            },
+            plugins: { legend: { display: false } },
+            responsive: true,
+            maintainAspectRatio: false,
+          },
+        });
+      })
+      .catch((err) => {
+        console.error("Failed to load SPI history:", err);
+      });
   </script>
 </html>

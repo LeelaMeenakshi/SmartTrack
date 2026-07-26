@@ -10,6 +10,9 @@ class Student(models.Model):
     discipline = models.CharField(max_length=50, default="CSE")
     batch_year = models.CharField(max_length=20, default="2025-26")
     total_credits_required = models.IntegerField(default=173)
+    foundation_program = models.BooleanField(default=False)
+    ge_course_1 = models.BooleanField(default=False)
+    ge_course_2 = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

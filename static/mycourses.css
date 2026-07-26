@@ -1,6 +1,8 @@
 .container{
     display: flex;
     flex-direction: row;
+    height: 100vh;
+    overflow: hidden;
 }
 span{
     color: #2563eb;
@@ -54,10 +56,12 @@ span{
 
 .main{
     flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     gap: 20px;
     padding: 20px;
+    overflow: auto;
 }
 .profile{
     background-color: ghostwhite;
@@ -78,81 +82,80 @@ span{
     padding: 20px;
     border-radius: 8px;
 }
-.acbutton button{
-    font-family: 'Times New Roman', Times, serif;
-    background-color: #2563eb;
-    color: white;
-    border-radius: 12px;
-    font-size: 20px;
-    cursor: pointer;
-    transition: 0.3s;
-    width: 180px;
-    padding: 15px;
-}
-.acbutton button:hover{
-    transform: scale(1.1);
-}
-.filters{
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-}
-select{
-    width: 250px;
-}
-.filters select{
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-family: 'Times New Roman', Times, serif;
-    background-color: ghostwhite;
-    outline: none;
-    font-size: 20px;
-}
-option{
-    border-radius: 8px;
-}
-.tablecard{
-    background-color: aliceblue;
-    border-radius: 8px;
-    margin-top: 20px;
-    padding: 20px;
-    font-size: 20px;
-}
-table{
-    width: 100%;
-}
-th{
-    text-align: left;
-}
-.editbtn,
-.deletebtn {
-    background-color: #ccc;
-    color: black;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 20px;
-    border-radius: 8px;
-    padding: 6px 12px;
-    cursor: pointer;
-    border: none;
-    transition: transform 0.2s;
-}
-.editbtn:hover,
-.deletebtn:hover{
-    transform:scale(1.05);
-}
-
 .actions{
     display: flex;
     gap: 20px;
 }
-th,
-td{
-    padding:12px;
+
+.guide-content {
+    background-color: aliceblue;
+    border-radius: 8px;
+    padding: 25px 30px;
+    overflow-y: auto;
+    height: calc(100vh - 160px);
 }
-tbody tr{
-    border-bottom:1px solid #ddd;
+
+.guide-section {
+    margin-bottom: 35px;
 }
-tbody tr:hover{
-    background:#f5f5f5;
+
+.guide-section h2 {
+    color: #2563eb;
+    margin-bottom: 12px;
+    font-size: 22px;
+}
+
+.guide-section h3 {
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+
+.guide-section p {
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.guide-section ul,
+.guide-section ol {
+    margin-left: 20px;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.guide-section li {
+    margin-bottom: 6px;
+}
+
+.note {
+    background-color: #e0f2fe;
+    border-left: 4px solid #2563eb;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin: 12px 0;
+}
+
+.guide-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.guide-table th,
+.guide-table td {
+    border: 1px solid #ccc;
+    padding: 10px 12px;
+    text-align: left;
+}
+
+.guide-table th {
+    background-color: #2563eb;
+    color: white;
+}
+
+.guide-table tr:nth-child(even) {
+    background-color: #f8fafc;
 }
